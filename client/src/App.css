@@ -1,0 +1,16 @@
+.wrapper {
+    display: grid;
+    grid-template-areas:
+        "header header"
+        "menu content";
+    grid-template-rows: 1fr;
+    grid-template-columns: 2fr 10fr;
+
+    width: 1200px;
+    margin: 0 auto;
+}
+
+.content {
+    grid-area: content;
+    background: aquamarine;
+}

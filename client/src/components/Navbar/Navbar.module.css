@@ -1,0 +1,12 @@
+.menu {
+    grid-area: menu;
+    background: aqua;
+}
+
+.menu__list{
+    list-style: none;
+}
+
+.menu__link{
+
+}
