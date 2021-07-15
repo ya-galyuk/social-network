@@ -1,0 +1,11 @@
+.posts__inputs {
+    display: flex;
+    margin-bottom: 30px;
+}
+
+.posts__textarea {
+    flex: 1 1 auto;
+}
+
+.posts__btn {
+}

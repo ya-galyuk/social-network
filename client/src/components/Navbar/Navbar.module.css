@@ -7,6 +7,6 @@
     list-style: none;
 }
 
-.menu__link{
-
+.menu__link.active{
+    color: brown;
 }

@@ -1,0 +1,20 @@
+.info{}
+.info__intro{
+    height: 200px;
+    margin-bottom: 30px;
+}
+.info__img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+.info__details{
+    display: flex;
+    margin-bottom: 30px;
+}
+.info__avatar{
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+}
+.info__description{}

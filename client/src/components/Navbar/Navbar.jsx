@@ -1,15 +1,16 @@
 import React from 'react';
 import cls from './Navbar.module.css';
+import {NavLink} from "react-router-dom";
 
 const Navbar = () => {
     return (
         <nav className={cls.menu}>
             <ul className={cls.menu__list}>
-                <li><a className={cls.menu__link} href="/profile">Profile</a></li>
-                <li><a className={cls.menu__link} href="/messages">Messages</a></li>
-                <li><a className={cls.menu__link} href="/news">News</a></li>
-                <li><a className={cls.menu__link} href="/music">Music</a></li>
-                <li><a className={cls.menu__link} href="/settings">Settings</a></li>
+                <li><NavLink className={cls.menu__link} activeClassName={cls.active} to="/profile">Profile</NavLink></li>
+                <li><NavLink className={cls.menu__link} activeClassName={cls.active} to="/messages">Messages</NavLink></li>
+                <li><NavLink className={cls.menu__link} activeClassName={cls.active} to="/news">News</NavLink></li>
+                <li><NavLink className={cls.menu__link} activeClassName={cls.active} to="/music">Music</NavLink></li>
+                <li><NavLink className={cls.menu__link} activeClassName={cls.active} to="/settings">Settings</NavLink></li>
             </ul>
         </nav>
     );

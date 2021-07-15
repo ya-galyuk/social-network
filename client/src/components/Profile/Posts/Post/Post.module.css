@@ -1,15 +1,15 @@
-.post{
-    margin: 10px 0;
+.post {
+    margin-bottom: 10px;
     padding: 10px;
     background: coral;
     display: flex;
     flex-direction: column;
 }
 
-.post__time{
+.post__time {
     font-size: 14px;
     opacity: .8;
 }
 
-.post__text{
+.post__text {
 }

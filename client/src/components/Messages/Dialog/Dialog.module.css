@@ -1,0 +1,4 @@
+.dialog__item{}
+.dialog__item .active{
+    color: brown;
+}
