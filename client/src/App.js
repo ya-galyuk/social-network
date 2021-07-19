@@ -11,8 +11,8 @@ const App = (props) => {
             <Header/>
             <Navbar/>
             <main className="content">
-                <Route path='/messages' render={() => <MessagesContainer store={props.store}/>}/>
-                <Route path='/profile' render={() => <Profile store={props.store}/>}/>
+                <Route path='/messages' render={() => <MessagesContainer/>}/>
+                <Route path='/profile' render={() => <Profile/>}/>
             </main>
         </div>
     );
