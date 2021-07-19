@@ -10,14 +10,18 @@ let rerenderEntireTree = (state) => {
     ReactDOM.render(
         <React.StrictMode>
             <BrowserRouter>
-                <App state={state} dispatch={store.dispatch.bind(store)}/>
+                <App store={store} state={state} dispatch={store.dispatch.bind(store)}/>
             </BrowserRouter>
         </React.StrictMode>,
         document.getElementById('root')
     );
 }
 rerenderEntireTree(store.getState())
-store.subscribe(rerenderEntireTree)
+
+store.subscribe(() => {
+    let state = store.getState()
+    rerenderEntireTree(state)
+})
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

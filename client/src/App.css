@@ -6,7 +6,7 @@
     grid-template-rows: 1fr;
     grid-template-columns: 2fr 10fr;
 
-    width: 1200px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
