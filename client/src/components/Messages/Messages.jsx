@@ -13,7 +13,7 @@ const Messages = (props) => {
     }
     const onNewMessageChange = (e) => {
         let body = e.target.value
-        props.updateNewMessageBodyCreator(body)
+        props.updateNewMessageBody(body)
     }
 
     return (
