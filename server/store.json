@@ -1,0 +1,70 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "fullName": "Yaroslav H",
+      "status": "fine",
+      "location": {
+        "country": "ukraine",
+        "city": "Kharkov"
+      },
+      "photo": "https://cdn3.vectorstock.com/i/1000x1000/38/17/male-face-avatar-logo-template-pictograph-vector-11333817.jpg",
+      "followed": true
+    },
+    {
+      "id": "2",
+      "fullName": "Yaroslav 2",
+      "status": "fine",
+      "location": {
+        "country": "ukraine",
+        "city": "Kharkov"
+      },
+      "photo": "https://cdn3.vectorstock.com/i/1000x1000/38/17/male-face-avatar-logo-template-pictograph-vector-11333817.jpg",
+      "followed": false
+    },
+    {
+      "id": "3",
+      "fullName": "Yaroslav 3",
+      "status": "fine",
+      "location": {
+        "country": "ukraine",
+        "city": "Kharkov"
+      },
+      "photo": "https://cdn3.vectorstock.com/i/1000x1000/38/17/male-face-avatar-logo-template-pictograph-vector-11333817.jpg",
+      "followed": true
+    },
+    {
+      "id": "4",
+      "fullName": "Yaroslav 4",
+      "status": "fine",
+      "location": {
+        "country": "ukraine",
+        "city": "Kharkov"
+      },
+      "photo": "https://cdn3.vectorstock.com/i/1000x1000/38/17/male-face-avatar-logo-template-pictograph-vector-11333817.jpg",
+      "followed": false
+    },
+    {
+      "id": "5",
+      "fullName": "Yaroslav 5",
+      "status": "fine",
+      "location": {
+        "country": "ukraine",
+        "city": "Kharkov"
+      },
+      "photo": "https://cdn3.vectorstock.com/i/1000x1000/38/17/male-face-avatar-logo-template-pictograph-vector-11333817.jpg",
+      "followed": true
+    },
+    {
+      "id": "6",
+      "fullName": "Yaroslav 6",
+      "status": "fine",
+      "location": {
+        "country": "ukraine",
+        "city": "Kharkov"
+      },
+      "photo": "https://cdn3.vectorstock.com/i/1000x1000/38/17/male-face-avatar-logo-template-pictograph-vector-11333817.jpg",
+      "followed": false
+    }
+  ]
+}

@@ -5,15 +5,18 @@ import userPhoto from '../../assets/images/user.png'
 
 const Users = (props) => {
 
-    if (props.users.length === 0) {
-        axios.get('http://localhost:5000/api/users')
-            .then(response => {
-                props.setUsers(response.data.users.items)
-            })
+    let getUsers = () => {
+        if (props.users.length === 0) {
+            axios.get('http://localhost:5000/api/users')
+                .then(response => {
+                    props.setUsers(response.data.users.items)
+                })
+        }
     }
 
     return (
         <>
+            <button onClick={getUsers}>Get users</button>
             {props.users.map(user =>
                 <div className={cls.user} key={user.id}>
                     <div>
