@@ -1,0 +1,25 @@
+.user{
+    display: flex;
+    padding: 10px;
+}
+.user__photo{
+    width: 50px;
+    height: 50px;
+}
+.user__img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.user__info{
+    display: flex;
+    flex: 1 auto;
+    justify-content: space-between;
+}
+.user__fullname{
+    font-weight: bold;
+}
+.user__status{
+    margin: 10px 0 0;
+}
+.user__location{}
