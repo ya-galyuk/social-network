@@ -1,10 +1,11 @@
 import {connect} from "react-redux";
 import {
-    followActionCreator,
-    setCurrentPageActionCreator,
-    setTotalCountActionCreator,
-    setUsersActionCreator, toggleIsLoadingActionCreator,
-    unfollowActionCreator
+    onFollow,
+    setCurrentPage,
+    setTotalCount,
+    setUsers,
+    toggleIsLoading,
+    onUnfollow
 } from "../../redux/reducer/users-reducer";
 import React from "react";
 import axios from "axios";
@@ -14,28 +15,28 @@ import Preloader from "../common/Preloader/Preloader";
 class UsersContainer extends React.Component {
 
     componentDidMount() {
-        this.props.toggleLoading(true)
+        this.props.toggleIsLoading(true)
         axios.get(`http://localhost:5000/api/users?page=${this.props.currentPage}&count=${this.props.pageSize}`)
             .then(response => {
-                this.props.toggleLoading(false)
+                this.props.toggleIsLoading(false)
                 this.props.setUsers(response.data.users.items)
                 this.props.setTotalCount(response.data.totalCount)
             })
     }
 
     onPageClick = (pageNumber) => {
-        this.props.toggleLoading(true)
+        this.props.toggleIsLoading(true)
         this.props.setCurrentPage(pageNumber)
         axios.get(`http://localhost:5000/api/users?page=${this.props.currentPage}&count=${this.props.pageSize}`)
             .then(response => {
-                this.props.toggleLoading(false)
+                this.props.toggleIsLoading(false)
                 this.props.setUsers(response.data.users.items)
             })
     }
 
     render() {
         return <>
-            {this.props.isLoading ? <Preloader/>: null}
+            {this.props.isLoading ? <Preloader/> : null}
             <Users
                 totalCount={this.props.totalCount}
                 pageSize={this.props.pageSize}
@@ -59,27 +60,11 @@ let mapStateToProps = (state) => {
     }
 }
 
-let mapDispatchToProps = (dispatch) => {
-    return {
-        onFollow: (userId) => {
-            dispatch(followActionCreator(userId))
-        },
-        onUnfollow: (userId) => {
-            dispatch(unfollowActionCreator(userId))
-        },
-        setUsers: (users) => {
-            dispatch(setUsersActionCreator(users))
-        },
-        setCurrentPage: (currentPage) => {
-            dispatch(setCurrentPageActionCreator(currentPage))
-        },
-        setTotalCount: (totalCount) => {
-            dispatch(setTotalCountActionCreator(totalCount))
-        },
-        toggleLoading: (isLoading) => {
-            dispatch(toggleIsLoadingActionCreator(isLoading))
-        }
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(UsersContainer);
+export default connect(mapStateToProps, {
+    onFollow,
+    onUnfollow,
+    setUsers,
+    setCurrentPage,
+    setTotalCount,
+    toggleIsLoading,
+})(UsersContainer);
