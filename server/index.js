@@ -57,7 +57,7 @@ app.post('/api/follow/:userId', (req, res) => {
 
 // auth only
 app.delete('/api/unfollow/:userId', (req, res) => {
-    return res.status(200).send({...store.follow})
+    return res.status(200).send({...store.unfollow})
 })
 
 app.listen(PORT, () => {

@@ -5,6 +5,8 @@ const login = () => {
         .then(response => response.data)
 }
 
-export default {
-    login
-}
+const exports = {
+    login,
+};
+
+export default exports;

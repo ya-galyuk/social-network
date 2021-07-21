@@ -11,13 +11,14 @@ const follow = (userId) => {
 }
 
 const unfollow = (userId) => {
-    return instance.post(`unfollow/${userId}`)
+    return instance.delete(`unfollow/${userId}`)
         .then(response => response.data)
 }
 
-export default {
+const exports = {
     getUsers,
     follow,
     unfollow
-}
+};
 
+export default exports;

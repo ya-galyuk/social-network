@@ -7,7 +7,7 @@ import authAPI from "../../api/authAPI";
 class HeaderContainer extends React.Component {
     componentDidMount() {
         // this.props.toggleIsLoading(true)
-        authAPI.login.then(data => {
+        authAPI.login().then(data => {
             // this.props.toggleIsLoading(false)
             if (data.resultCode === 0) {
                 let {id, email, login} = data.user

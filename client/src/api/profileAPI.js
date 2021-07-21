@@ -5,6 +5,8 @@ const getProfile = (userId) => {
         .then(response => response.data)
 }
 
-export default {
-    getProfile
-}
+const exports = {
+    getProfile,
+};
+
+export default exports;

@@ -13,8 +13,47 @@ const Users = (props) => {
         pages.push(i)
     }
 
+    let onClickFollow = (userId) => {
+        return usersAPI.follow(userId).then(data => {
+            if (data.resultCode === 0) {
+                props.onFollow(userId)
+            }
+        })
+    }
+
+    let onClickUnfollow = (userId) => {
+        return usersAPI.unfollow(userId).then(data => {
+            if (data.resultCode === 0) {
+                props.onUnfollow(userId)
+            }
+        })
+    }
+
     return (
         <>
+            <div className={cls.user__list}>
+                {props.users.map(user =>
+                    <div className={cls.user__item} key={user.id}>
+                        <NavLink to={`/profile/${user.id}`} className={cls.user__link}>
+                            <div className={cls.user__photo}>
+                                <img className={cls.user__img}
+                                     src={user.photos.small || userPhoto}
+                                     alt=""/>
+                            </div>
+                            <div className={cls.user__info}>
+                                <span className={cls.user__fullName}>{user.fullName}</span>
+                                <p className={cls.user__about}>{user.about}</p>
+                            </div>
+                        </NavLink>
+
+                        {user.followed
+                            ? <button className={cls.user__btn} onClick={() => onClickUnfollow(user.id)}>Unfollow</button>
+                            : <button className={cls.user__btn} onClick={() => onClickFollow(user.id)}>Follow</button>
+                        }
+                    </div>
+                )}
+            </div>
+
             <div className={cls.pagination}>
                 {pages.map(page => <span
                         key={page}
@@ -23,51 +62,6 @@ const Users = (props) => {
                     >{page}</span>
                 )}
             </div>
-
-            {props.users.map(user =>
-                <div className={cls.user} key={user.id}>
-                    <div>
-                        <div className={cls.user__photo}>
-                            <NavLink to={`/profile/${user.id}`}>
-                                <img className={cls.user__img}
-                                     src={user.photo || userPhoto}
-                                     alt=""/>
-                            </NavLink>
-                        </div>
-                        {user.followed
-                            ? <button onClick={() => {
-
-                                usersAPI.unfollow(user.id).then(data => {
-                                    if (data.resultCode === 0) {
-                                        props.onUnfollow(user.id)
-                                    }
-                                })
-
-
-                            }}>Unfollow</button>
-
-                            : <button onClick={() => {
-
-                                usersAPI.follow(user.id).then(data => {
-                                    if (data.resultCode === 0) {
-                                        props.onFollow(user.id)
-                                    }
-                                })
-
-                            }}>Follow</button>
-                        }
-                    </div>
-                    <div className={cls.user__info}>
-                        <div>
-                            <span className={cls.user__fullname}>{user.fullName}</span>
-                            <p className={cls.user__status}>{user.status}</p>
-                        </div>
-                        <div className={cls.user__location}>
-                            {/*{user.location.country}, {user.location.city}*/}
-                        </div>
-                    </div>
-                </div>
-            )}
         </>
     );
 };

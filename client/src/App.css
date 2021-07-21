@@ -13,4 +13,5 @@
 .content {
     grid-area: content;
     background: aquamarine;
+    padding: 20px;
 }
