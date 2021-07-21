@@ -45,6 +45,10 @@ app.get('/api/profile/:userId', (req, res) => {
     return res.status(200).send({})
 })
 
+app.post('/api/auth/login', (req, res) => {
+    return res.status(200).send({...store.auth})
+})
+
 app.listen(PORT, () => {
     console.log(`App listening at http://localhost:${PORT}`)
 })

@@ -1,5 +1,5 @@
 import './App.css';
-import Header from "./components/Header/Header";
+import HeaderContainer from "./components/Header/HeaderContainer";
 import Navbar from "./components/Navbar/Navbar";
 import {Route} from 'react-router-dom'
 import MessagesContainer from "./components/Messages/MessagesContainer";
@@ -9,7 +9,7 @@ import ProfileContainer from "./components/Profile/ProfileContainer";
 const App = () => {
     return (
         <div className="wrapper">
-            <Header/>
+            <HeaderContainer/>
             <Navbar/>
             <main className="content">
                 <Route path='/messages' render={() => <MessagesContainer/>}/>
