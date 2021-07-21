@@ -2,7 +2,7 @@ import React from 'react';
 import cls from './Users.module.css'
 import userPhoto from '../../assets/images/user.png'
 import {NavLink} from "react-router-dom";
-import axios from "axios";
+import usersAPI from "../../api/usersAPI";
 
 const Users = (props) => {
 
@@ -37,10 +37,8 @@ const Users = (props) => {
                         {user.followed
                             ? <button onClick={() => {
 
-                                axios.delete(`http://localhost:5000/api/unfollow/${user.id}`, {
-                                    withCredentials: true
-                                }).then(response => {
-                                    if (response.data.resultCode === 0) {
+                                usersAPI.unfollow(user.id).then(data => {
+                                    if (data.resultCode === 0) {
                                         props.onUnfollow(user.id)
                                     }
                                 })
@@ -50,10 +48,8 @@ const Users = (props) => {
 
                             : <button onClick={() => {
 
-                                axios.post(`http://localhost:5000/api/follow/${user.id}`, {}, {
-                                    withCredentials: true
-                                }).then(response => {
-                                    if (response.data.resultCode === 0) {
+                                usersAPI.follow(user.id).then(data => {
+                                    if (data.resultCode === 0) {
                                         props.onFollow(user.id)
                                     }
                                 })

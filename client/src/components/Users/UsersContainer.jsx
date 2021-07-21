@@ -8,33 +8,29 @@ import {
     onUnfollow
 } from "../../redux/reducer/users-reducer";
 import React from "react";
-import axios from "axios";
 import Users from "./Users";
 import Preloader from "../common/Preloader/Preloader";
+import usersAPI from "../../api/usersAPI";
 
 class UsersContainer extends React.Component {
 
     componentDidMount() {
         this.props.toggleIsLoading(true)
-        axios.get(`http://localhost:5000/api/users?page=${this.props.currentPage}&count=${this.props.pageSize}`, {
-            withCredentials: true
-        })
-            .then(response => {
+        usersAPI.getUsers(this.props.currentPage, this.props.pageSize)
+            .then(data => {
                 this.props.toggleIsLoading(false)
-                this.props.setUsers(response.data.users.items)
-                this.props.setTotalCount(response.data.totalCount)
+                this.props.setUsers(data.users.items)
+                this.props.setTotalCount(data.totalCount)
             })
     }
 
     onPageClick = (pageNumber) => {
         this.props.toggleIsLoading(true)
         this.props.setCurrentPage(pageNumber)
-        axios.get(`http://localhost:5000/api/users?page=${this.props.currentPage}&count=${this.props.pageSize}`, {
-            withCredentials: true
-        })
-            .then(response => {
+        usersAPI.getUsers(pageNumber, this.props.pageSize)
+            .then(data => {
                 this.props.toggleIsLoading(false)
-                this.props.setUsers(response.data.users.items)
+                this.props.setUsers(data.users.items)
             })
     }
 
