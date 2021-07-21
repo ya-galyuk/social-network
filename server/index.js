@@ -34,6 +34,17 @@ app.get('/api/users', (req, res) => {
     })
 })
 
+app.get('/api/profile/:userId', (req, res) => {
+    const {userId} = req.params
+
+    for (const profile of store.profiles) {
+        if (profile.userId === userId) {
+            return res.send(profile)
+        }
+    }
+    return res.status(200).send({})
+})
+
 app.listen(PORT, () => {
     console.log(`App listening at http://localhost:${PORT}`)
 })

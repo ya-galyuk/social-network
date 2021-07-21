@@ -3,11 +3,9 @@ import {sendMessage, updateNewMessageBody} from "../../redux/reducer/dialogs-red
 import Messages from "./Messages";
 import {connect} from "react-redux";
 
-let mapStateToProps = (state) => {
-    return {
-        messagesPage: state.messagesPage
-    }
-}
+let mapStateToProps = (state) => ({
+    messagesPage: state.messagesPage
+})
 
 const MessagesContainer = connect(mapStateToProps, {
     sendMessage,
