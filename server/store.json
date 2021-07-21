@@ -167,5 +167,15 @@
     },
     "messages": [],
     "resultCode": 0
+  },
+  "follow": {
+    "messages": [],
+    "resultCode": 0,
+    "data": {}
+  },
+  "unfollow": {
+    "messages": [],
+    "resultCode": 0,
+    "data": {}
   }
 }

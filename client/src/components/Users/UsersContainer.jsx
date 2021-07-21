@@ -16,7 +16,9 @@ class UsersContainer extends React.Component {
 
     componentDidMount() {
         this.props.toggleIsLoading(true)
-        axios.get(`http://localhost:5000/api/users?page=${this.props.currentPage}&count=${this.props.pageSize}`)
+        axios.get(`http://localhost:5000/api/users?page=${this.props.currentPage}&count=${this.props.pageSize}`, {
+            withCredentials: true
+        })
             .then(response => {
                 this.props.toggleIsLoading(false)
                 this.props.setUsers(response.data.users.items)
@@ -27,7 +29,9 @@ class UsersContainer extends React.Component {
     onPageClick = (pageNumber) => {
         this.props.toggleIsLoading(true)
         this.props.setCurrentPage(pageNumber)
-        axios.get(`http://localhost:5000/api/users?page=${this.props.currentPage}&count=${this.props.pageSize}`)
+        axios.get(`http://localhost:5000/api/users?page=${this.props.currentPage}&count=${this.props.pageSize}`, {
+            withCredentials: true
+        })
             .then(response => {
                 this.props.toggleIsLoading(false)
                 this.props.setUsers(response.data.users.items)

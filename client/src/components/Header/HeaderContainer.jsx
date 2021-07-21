@@ -7,7 +7,7 @@ import axios from "axios";
 class HeaderContainer extends React.Component {
     componentDidMount() {
         // this.props.toggleIsLoading(true)
-        axios.post(`http://localhost:5000/api/auth/login`, {
+        axios.post(`http://localhost:5000/api/auth/login`, {}, {
             withCredentials: true
         }).then(response => {
             // this.props.toggleIsLoading(false)

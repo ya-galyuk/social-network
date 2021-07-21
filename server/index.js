@@ -15,6 +15,7 @@ app.use(cors({
     origin: process.env.CLIENT_URL
 }))
 
+// auth only
 app.get('/api/users', (req, res) => {
     const {page, count} = req.query
 
@@ -47,6 +48,16 @@ app.get('/api/profile/:userId', (req, res) => {
 
 app.post('/api/auth/login', (req, res) => {
     return res.status(200).send({...store.auth})
+})
+
+// auth only
+app.post('/api/follow/:userId', (req, res) => {
+    return res.status(200).send({...store.follow})
+})
+
+// auth only
+app.delete('/api/unfollow/:userId', (req, res) => {
+    return res.status(200).send({...store.follow})
 })
 
 app.listen(PORT, () => {
