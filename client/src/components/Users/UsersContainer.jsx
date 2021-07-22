@@ -1,38 +1,19 @@
 import {connect} from "react-redux";
 import {
-    onFollow,
-    setCurrentPage,
-    setTotalCount,
-    setUsers,
-    toggleIsLoading,
-    onUnfollow,
-    toggleIsFollowingInProgress
+    getUsers, follow, unfollow
 } from "../../redux/reducer/users-reducer";
 import React from "react";
 import Users from "./Users";
 import Preloader from "../common/Preloader/Preloader";
-import usersAPI from "../../api/usersAPI";
 
 class UsersContainer extends React.Component {
 
     componentDidMount() {
-        this.props.toggleIsLoading(true)
-        usersAPI.getUsers(this.props.currentPage, this.props.pageSize)
-            .then(data => {
-                this.props.toggleIsLoading(false)
-                this.props.setUsers(data.users.items)
-                this.props.setTotalCount(data.totalCount)
-            })
+        this.props.getUsers(this.props.currentPage, this.props.pageSize)
     }
 
     onPageClick = (pageNumber) => {
-        this.props.toggleIsLoading(true)
-        this.props.setCurrentPage(pageNumber)
-        usersAPI.getUsers(pageNumber, this.props.pageSize)
-            .then(data => {
-                this.props.toggleIsLoading(false)
-                this.props.setUsers(data.users.items)
-            })
+        this.props.getUsers(pageNumber, this.props.pageSize)
     }
 
     render() {
@@ -44,10 +25,9 @@ class UsersContainer extends React.Component {
                 currentPage={this.props.currentPage}
                 onPageClick={this.onPageClick}
                 users={this.props.users}
-                onFollow={this.props.onFollow}
-                onUnfollow={this.props.onUnfollow}
+                follow={this.props.follow}
+                unfollow={this.props.unfollow}
                 followingInProgress={this.props.followingInProgress}
-                toggleIsFollowingInProgress={this.props.toggleIsFollowingInProgress}
             />
         </>
     }
@@ -63,11 +43,7 @@ let mapStateToProps = (state) => ({
 })
 
 export default connect(mapStateToProps, {
-    onFollow,
-    onUnfollow,
-    setUsers,
-    setCurrentPage,
-    setTotalCount,
-    toggleIsLoading,
-    toggleIsFollowingInProgress
+    follow,
+    unfollow,
+    getUsers
 })(UsersContainer);

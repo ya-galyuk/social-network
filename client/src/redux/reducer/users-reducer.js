@@ -1,3 +1,5 @@
+import usersAPI from "../../api/usersAPI";
+
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
 const SET_USERS = 'SET_USERS';
@@ -72,5 +74,36 @@ export const setCurrentPage = (currentPage) => ({type: SET_CURRENT_PAGE, current
 export const setTotalCount = (totalCount) => ({type: SET_TOTAL_COUNT, totalCount})
 export const toggleIsLoading = (isLoading) => ({type: TOGGLE_IS_LOADING, isLoading})
 export const toggleIsFollowingInProgress = (isProgress, userId) => ({type: TOGGLE_IS_FOLLOWING_PROGRESS, isProgress, userId})
+
+export const getUsers = (currentPage, pageSize) => (dispatch) => {
+    dispatch(toggleIsLoading(true))
+    dispatch(setCurrentPage(currentPage))
+    usersAPI.getUsers(currentPage, pageSize)
+        .then(data => {
+            dispatch(toggleIsLoading(false))
+            dispatch(setUsers(data.users.items))
+            dispatch(setTotalCount(data.totalCount))
+        })
+}
+
+export const follow = (userId) => (dispatch) => {
+    dispatch(toggleIsFollowingInProgress(true, userId))
+    return usersAPI.follow(userId).then(data => {
+        if (data.resultCode === 0) {
+            dispatch(onFollow(userId))
+        }
+        dispatch(toggleIsFollowingInProgress(false, userId))
+    })
+}
+
+export const unfollow = (userId) => (dispatch) => {
+    dispatch(toggleIsFollowingInProgress(true, userId))
+    return usersAPI.unfollow(userId).then(data => {
+        if (data.resultCode === 0) {
+            dispatch(onUnfollow(userId))
+        }
+        dispatch(toggleIsFollowingInProgress(false, userId))
+    })
+}
 
 export default usersReducer

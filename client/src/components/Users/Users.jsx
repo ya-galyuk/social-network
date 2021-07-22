@@ -2,7 +2,6 @@ import React from 'react';
 import cls from './Users.module.css'
 import userPhoto from '../../assets/images/user.png'
 import {NavLink} from "react-router-dom";
-import usersAPI from "../../api/usersAPI";
 
 const Users = (props) => {
 
@@ -11,26 +10,6 @@ const Users = (props) => {
     let pages = []
     for (let i = 1; i <= pagesCount; i++) {
         pages.push(i)
-    }
-
-    let onClickFollow = (userId) => {
-        props.toggleIsFollowingInProgress(true, userId)
-        return usersAPI.follow(userId).then(data => {
-            if (data.resultCode === 0) {
-                props.onFollow(userId)
-            }
-            props.toggleIsFollowingInProgress(false, userId)
-        })
-    }
-
-    let onClickUnfollow = (userId) => {
-        props.toggleIsFollowingInProgress(true, userId)
-        return usersAPI.unfollow(userId).then(data => {
-            if (data.resultCode === 0) {
-                props.onUnfollow(userId)
-            }
-            props.toggleIsFollowingInProgress(false, userId)
-        })
     }
 
     return (
@@ -51,8 +30,12 @@ const Users = (props) => {
                         </NavLink>
 
                         {user.followed
-                            ? <button className={cls.user__btn} disabled={props.followingInProgress.some(id => id === user.id)} onClick={() => onClickUnfollow(user.id)}>Unfollow</button>
-                            : <button className={cls.user__btn} disabled={props.followingInProgress.some(id => id === user.id)} onClick={() => onClickFollow(user.id)}>Follow</button>
+                            ? <button className={cls.user__btn}
+                                      disabled={props.followingInProgress.some(id => id === user.id)}
+                                      onClick={() => props.unfollow(user.id)}>Unfollow</button>
+                            : <button className={cls.user__btn}
+                                      disabled={props.followingInProgress.some(id => id === user.id)}
+                                      onClick={() => props.follow(user.id)}>Follow</button>
                         }
                     </div>
                 )}
