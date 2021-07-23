@@ -1,21 +1,103 @@
-.info{}
-.info__intro{
-    height: 200px;
-    margin-bottom: 30px;
+.info {
+    display: flex;
+    flex-direction: column;
 }
-.info__img{
+
+.info div:last-child {
+    margin-bottom: 0;
+}
+
+.info__avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 10px;
+}
+
+.info__img {
     height: 100%;
     width: 100%;
     object-fit: cover;
+    border-radius: 5px;
 }
-.info__details{
+
+.details,
+.contacts,
+.about,
+.educations {
+    margin: 10px 0;
+    padding: 20px;
+    border: 1px solid var(--gray_light);
+    border-radius: 5px;
+    background: var(--light);
+}
+
+.contacts__title,
+.about__title,
+.educations__title {
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.details {
+    line-height: 1.5;
+}
+
+.details__fullname {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+
+.contacts__item {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.contacts__item:last-child {
+    margin: 0;
+}
+
+
+.educations__item {
+    margin-bottom: 20px;
     display: flex;
-    flex-direction: column;
-    margin-bottom: 30px;
 }
-.info__avatar{
-    width: 50px;
-    height: 50px;
-    margin-right: 20px;
+
+.educations__item:last-child {
+    margin: 0;
 }
-.info__description{}
+
+.about{
+    line-height: 1.5;
+}
+
+.educations__logo {
+    width: 70px;
+    height: 70px;
+}
+
+.educations__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.educations__info {
+    margin-left: 20px;
+    line-height: 1.5;
+}
+
+.educations__university {
+    font-weight: 700;
+}
+
+.educations__details {
+}
+
+.educations__addressAndYears {
+    color: var(--gray);
+}

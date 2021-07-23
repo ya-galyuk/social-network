@@ -2,7 +2,7 @@ import {sendMessage, updateNewMessageBody} from "../../redux/reducer/dialogs-red
 import Messages from "./Messages";
 import {connect} from "react-redux";
 import {compose} from "redux";
-import {withAuthRedirect} from "../../hoc/withAuthRedirect";
+// import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 
 let mapStateToProps = (state) => ({
     messagesPage: state.messagesPage

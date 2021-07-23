@@ -17,15 +17,15 @@ const Posts = (props) => {
     }
 
     return (
-        <>
-            <h2>My posts</h2>
+        <div className={cls.posts}>
+            <h2 className={cls.posts__title}>My posts</h2>
             <div className={cls.posts__inputs}>
                 <textarea className={cls.posts__textarea} onChange={onPostChange} ref={newPostElement}
                           value={props.newPostText}/>
                 <button className={cls.posts__btn} onClick={onAddPost}>Public</button>
             </div>
             {postsElements}
-        </>
+        </div>
     );
 };
 
