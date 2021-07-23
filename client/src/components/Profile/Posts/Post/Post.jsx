@@ -6,7 +6,7 @@ const Post = (props) => {
     return (
         <div className={cls.post}>
             <span className={cls.post__time}>{props.time}</span>
-            <span className={cls.post__text}>{props.text}</span>
+            <p className={cls.post__text}>{props.text}</p>
         </div>
     );
 };
