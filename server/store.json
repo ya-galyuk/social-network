@@ -423,5 +423,10 @@
     "messages": [],
     "resultCode": 0,
     "data": {}
+  },
+  "status": {
+    "messages": [],
+    "resultCode": 0,
+    "status": "status message"
   }
 }

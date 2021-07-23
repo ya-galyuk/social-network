@@ -46,6 +46,16 @@ app.get('/api/profile/:userId', (req, res) => {
     return res.status(200).send({})
 })
 
+app.get('/api/profile/status/:userId', (req, res) => {
+    return res.status(200).send({...store.status})
+})
+
+app.put('/api/profile/status', (req, res) => {
+    const {status} = req.body
+    console.log({...store.status, status})
+    return res.status(200).send({...store.status, status})
+})
+
 app.post('/api/auth/login', (req, res) => {
     return res.status(200).send({...store.auth})
 })
