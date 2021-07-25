@@ -2,7 +2,7 @@ import React from 'react';
 import cls from './ProfileInfo.module.css'
 import Preloader from "../../common/Preloader/Preloader";
 import ProfileStatus from "./ProfileStatus";
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 const ProfileInfo = (props) => {
     if (!props.profile) {
