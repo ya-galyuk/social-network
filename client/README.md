@@ -1,13 +1,21 @@
-# Getting Started with Create React App
+# Client social network
 
-## Available Scripts
+## ⚙️ Technologies
 
-In the project directory, you can run:
+- react.js
+- redux.js
+- redux-form
+- axios
 
-### `npm start`
+## 🚀 Installation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```shell
+cd client
+npm install
+npm run start
+```
+
+### 🎉 The Client started on [http://localhost:3000](http://localhost:3000)
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
