@@ -3,7 +3,7 @@ import cls from './Posts.module.css'
 import Post from "./Post/Post";
 import PostForm from "./PostForm";
 
-const Posts = (props) => {
+const Posts = React.memo((props) => {
     const postsElements = props.posts.map(post => <Post post={post} key={post.id}/>)
 
     const onSubmit = (formData) => {
@@ -17,6 +17,6 @@ const Posts = (props) => {
             {postsElements}
         </div>
     );
-};
+});
 
 export default Posts;
