@@ -52,7 +52,6 @@ app.get('/api/profile/status/:userId', (req, res) => {
 
 app.put('/api/profile/status', (req, res) => {
     const {status} = req.body
-    console.log({...store.status, status})
     return res.status(200).send({...store.status, status})
 })
 

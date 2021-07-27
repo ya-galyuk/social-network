@@ -7,7 +7,6 @@ const Posts = (props) => {
     const postsElements = props.posts.map(post => <Post post={post} key={post.id}/>)
 
     const onSubmit = (formData) => {
-        console.log(formData)
         props.addPost(formData.postMessage)
     }
 

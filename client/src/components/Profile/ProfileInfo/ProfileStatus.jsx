@@ -1,56 +1,34 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
-class ProfileStatus extends React.Component {
-    state = {
-        editMode: false,
-        status: this.props.status
+const ProfileStatus = (props) => {
+
+    let [editMode, setEditMode] = useState(false)
+    let [status, setStatus] = useState(props.status)
+
+    useEffect(() => {
+        setStatus(props.status)
+    }, [props.status])
+
+    const activateEditMode = () => {
+        setEditMode(true)
     }
 
-    activateEditMode = () => {
-        this.setState({
-            editMode: true
-        })
+    const deactivateEditMode = () => {
+        setEditMode(false)
+        props.updateUserProfile(status)
     }
 
-    deactivateEditMode = () => {
-        this.setState({
-            editMode: false
-        })
-        this.props.updateUserProfile(this.state.status)
+    const onStatusChange = (e) => {
+        let value = e.currentTarget.value
+        setStatus(value)
     }
 
-    onStatusChange = (e) => {
-        this.setState({
-            status: e.currentTarget.value
-        })
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.status !== this.props.status) {
-            this.setState({
-                status: this.props.status
-            })
+    return <>
+        {!editMode
+            ? <span onDoubleClick={activateEditMode}>{props.status || "----"}</span>
+            : <input value={status} onChange={onStatusChange} onBlur={deactivateEditMode} autoFocus={true}/>
         }
-    }
-
-    render() {
-        return <>
-            {!this.state.editMode
-                ? <div>
-                    <span onDoubleClick={this.activateEditMode}>{this.props.status}</span>
-                </div>
-                : <div>
-                    <input
-                        type="text"
-                        value={this.state.status || '---'}
-                        onChange={this.onStatusChange}
-                        onBlur={this.deactivateEditMode}
-                        autoFocus={true}
-                    />
-                </div>
-            }
-        </>
-    }
+    </>
 }
 
 export default ProfileStatus;

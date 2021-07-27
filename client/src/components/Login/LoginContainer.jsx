@@ -3,6 +3,7 @@ import LoginForm from "./LoginForm";
 import {connect} from "react-redux";
 import {login} from "../../redux/reducer/auth-reducer";
 import {Redirect} from "react-router";
+import {getIsAuth} from "../../redux/selectors/auth-selectors";
 
 const LoginContainer = (props) => {
     const onSubmit = (formData) => {
@@ -22,7 +23,7 @@ const LoginContainer = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-    isAuth: state.auth.isAuth,
+    isAuth: getIsAuth(state),
 })
 
 
