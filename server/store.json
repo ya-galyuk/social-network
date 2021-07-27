@@ -406,13 +406,29 @@
     }
   ],
   "auth": {
-    "user": {
-      "id": 1,
-      "email": "email",
-      "login": "username"
+    "me": {
+      "user": {
+        "id": 1,
+        "email": "email",
+        "login": "username"
+      },
+      "messages": [],
+      "resultCode": 0
     },
-    "messages": [],
-    "resultCode": 1
+    "login": {
+      "user": {
+        "id": 1,
+        "email": "email",
+        "login": "username"
+      },
+      "messages": [],
+      "resultCode": 0
+    },
+    "logout": {
+      "user": {},
+      "messages": [],
+      "resultCode": 0
+    }
   },
   "follow": {
     "messages": [],

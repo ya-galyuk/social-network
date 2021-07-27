@@ -56,8 +56,20 @@ app.put('/api/profile/status', (req, res) => {
     return res.status(200).send({...store.status, status})
 })
 
+app.post('/api/auth/me', (req, res) => {
+    return res.status(200).send({...store.auth.me})
+})
+
 app.post('/api/auth/login', (req, res) => {
-    return res.status(200).send({...store.auth})
+    const {email, password, rememberMe} = req.body
+    if (email !== "admin") {
+        return res.send({...store.auth.login, messages: ["Incorrect email or password"], resultCode: 1})
+    }
+    return res.status(200).send({...store.auth.login})
+})
+
+app.delete('/api/auth/logout', (req, res) => {
+    return res.status(200).send({...store.auth.logout})
 })
 
 // auth only
