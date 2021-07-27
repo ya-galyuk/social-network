@@ -1,29 +1,20 @@
 import React from 'react';
 import cls from './Posts.module.css'
 import Post from "./Post/Post";
+import PostForm from "./PostForm";
 
 const Posts = (props) => {
-    const newPostElement = React.createRef()
-
     const postsElements = props.posts.map(post => <Post post={post} key={post.id}/>)
 
-    const onAddPost = () => {
-        props.addPost()
-    }
-
-    const onPostChange = () => {
-        let text = newPostElement.current.value
-        props.updateNewPostText(text)
+    const onSubmit = (formData) => {
+        console.log(formData)
+        props.addPost(formData.postMessage)
     }
 
     return (
         <div className={cls.posts}>
             <h2 className={cls.posts__title}>My posts</h2>
-            <div className={cls.posts__inputs}>
-                <textarea className={cls.posts__textarea} onChange={onPostChange} ref={newPostElement}
-                          value={props.newPostText}/>
-                <button className={cls.posts__btn} onClick={onAddPost}>Public</button>
-            </div>
+            <PostForm onSubmit={onSubmit}/>
             {postsElements}
         </div>
     );
