@@ -4,7 +4,7 @@ import {Textarea} from "../common/FormsControls/Input";
 import {maxLength15} from "../../utils/validators";
 
 let MessagesForm = (props) => {
-    let {handleSubmit} = props
+    const {handleSubmit} = props
 
     return (
         <form onSubmit={handleSubmit}>

@@ -13,16 +13,17 @@ import {
     getPageSize,
     getTotalCount, getUsers
 } from "../../redux/selectors/users-selectors";
-// import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 
 class UsersContainer extends React.Component {
 
     componentDidMount() {
-        this.props.requestUsers(this.props.currentPage, this.props.pageSize)
+        const {currentPage, pageSize, getUsers} = this.props
+        getUsers(currentPage, pageSize)
     }
 
     onPageClick = (pageNumber) => {
-        this.props.requestUsers(pageNumber, this.props.pageSize)
+        const {pageSize, getUsers} = this.props
+        getUsers(pageNumber, pageSize)
     }
 
     render() {
@@ -53,9 +54,7 @@ let mapStateToProps = (state) => ({
 
 export default compose(
     connect(mapStateToProps, {
-        follow,
-        unfollow,
-        requestUsers
+        follow, unfollow,
+        getUsers: requestUsers
     }),
-    // withAuthRedirect
 )(UsersContainer)

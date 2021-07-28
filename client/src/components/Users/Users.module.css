@@ -87,32 +87,3 @@
 .user__btn:disabled {
     background: var(--gray_light);
 }
-
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.pagination span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 20px;
-    margin: 0 10px;
-    padding: 10px;
-    border: 1px solid var(--gray_light);
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.pagination span:hover {
-    background: var(--blue);
-    color: var(--light);
-}
-
-.page_selected {
-    font-weight: bold;
-    background: var(--blue);
-    color: var(--light);
-}

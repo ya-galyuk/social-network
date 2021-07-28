@@ -5,7 +5,7 @@ import {maxLength15, required} from "../../utils/validators";
 import Input from "../common/FormsControls/Input";
 
 let LoginForm = (props) => {
-    const {handleSubmit} = props
+    const {handleSubmit, error} = props
     return (
         <form onSubmit={handleSubmit}>
             <div>
@@ -20,7 +20,7 @@ let LoginForm = (props) => {
                 <Field component={Input} name={"rememberMe"} type={"checkbox"}/>
                 <label htmlFor="rememberMe"> remember me</label>
             </div>
-            {props.error && <div className={cls.error}>{props.error}</div>}
+            {error && <div className={cls.error}>{error}</div>}
             <div>
                 <button>Login</button>
             </div>

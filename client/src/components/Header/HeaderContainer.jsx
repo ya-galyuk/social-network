@@ -6,7 +6,6 @@ import {getIsAuth, getIsLoading, getLogin} from "../../redux/selectors/auth-sele
 
 const HeaderContainer = (props) => {
     return <Header {...props}/>
-
 }
 
 let mapStateToProps = (state) => ({

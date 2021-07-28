@@ -6,11 +6,13 @@ import {Redirect} from "react-router";
 import {getIsAuth} from "../../redux/selectors/auth-selectors";
 
 const LoginContainer = (props) => {
+    const {isAuth, login} = props
+
     const onSubmit = (formData) => {
-        props.login(formData.email, formData.password, formData.rememberMe)
+        login(formData.email, formData.password, formData.rememberMe)
     }
 
-    if (props.isAuth) {
+    if (isAuth) {
         return <Redirect to={"/profile"}/>
     }
 

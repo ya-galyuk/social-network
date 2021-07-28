@@ -5,11 +5,13 @@ import Dialog from "./Dialog/Dialog";
 import MessagesForm from "./MessagesForm";
 
 const Messages = (props) => {
-    const dialogsElements = props.messagesPage.dialogs.map(dialog => <Dialog dialog={dialog} key={dialog.id}/>)
-    const messagesElements = props.messagesPage.messages.map(message => <Message message={message} key={message.id}/>)
+    const {messagesPage, sendMessage} = props
+
+    const dialogsElements = messagesPage.dialogs.map(dialog => <Dialog dialog={dialog} key={dialog.id}/>)
+    const messagesElements = messagesPage.messages.map(message => <Message message={message} key={message.id}/>)
 
     const onSubmit = (formData) => {
-        props.sendMessage(formData.message)
+        sendMessage(formData.message)
     }
 
     return (

@@ -2,11 +2,11 @@ import React from 'react';
 import cls from './Post.module.css'
 
 const Post = (props) => {
-    props = props.post
+    const {time, text} = props.post
     return (
         <div className={cls.post}>
-            <span className={cls.post__time}>{props.time}</span>
-            <p className={cls.post__text}>{props.text}</p>
+            <span className={cls.post__time}>{time}</span>
+            <p className={cls.post__text}>{text}</p>
         </div>
     );
 };

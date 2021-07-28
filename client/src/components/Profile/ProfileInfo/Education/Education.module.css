@@ -1,0 +1,35 @@
+.educations__item {
+    margin-bottom: 20px;
+    display: flex;
+}
+
+.educations__item:last-child {
+    margin: 0;
+}
+
+.educations__logo {
+    width: 70px;
+    height: 70px;
+}
+
+.educations__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.educations__info {
+    margin-left: 20px;
+    line-height: 1.5;
+}
+
+.educations__university {
+    font-weight: 700;
+}
+
+.educations__details {
+}
+
+.educations__addressAndYears {
+    color: var(--gray);
+}
