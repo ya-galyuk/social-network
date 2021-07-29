@@ -10,9 +10,15 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json())
 
+const whitelist = [process.env.CLIENT_URL, "https://ya-galyuk.github.io"]
 app.use(cors({
     credentials: true,
-    origin: process.env.CLIENT_URL
+    origin: (origin, callback) => {
+        if (whitelist.indexOf(origin) !== -1) {
+            callback(null, true)
+        }
+        callback(null, false)
+    }
 }))
 
 // auth only

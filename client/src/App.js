@@ -26,7 +26,7 @@ class App extends Component {
                 <HeaderContainer/>
                 <Navbar/>
                 <main className="content">
-                    <Suspense fallback={<div>Завантаження...</div>}>
+                    <Suspense fallback={<Preloader/>}>
                         <Switch>
                             <Route path='/messages' render={() => <MessagesContainer/>}/>
                             <Route path='/profile/:userId?' render={() => <ProfileContainer/>}/>

@@ -27,3 +27,11 @@ CLIENT_URL=http://localhost:3000
 ### 🎉 The sever started on [http://localhost:5000](http://localhost:5000)
 
 The server will reload if you make edits.
+
+## :octocat: GitHub Pages
+
+Add to file `.env`:
+
+```dotenv
+GITHUB_PAGES_URL=https://<username>.github.io
+```
