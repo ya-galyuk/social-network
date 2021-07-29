@@ -21,8 +21,8 @@ app.get('/api/users', (req, res) => {
 
     const totalCount = store.users.length
 
-    let start = (page - 1) * count
-    let end = start + count
+    let start = Number((page - 1) * count)
+    let end = Number(page * count)
 
     if (end > totalCount)
         end = totalCount

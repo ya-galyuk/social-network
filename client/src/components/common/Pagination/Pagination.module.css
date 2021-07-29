@@ -4,11 +4,13 @@
     margin-top: 20px;
 }
 
-.pagination span {
+.pagination span,
+.pagination button {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 20px;
+    min-width: 45px;
+    box-sizing: border-box;
     margin: 0 10px;
     padding: 10px;
     border: 1px solid var(--gray_light);
@@ -16,7 +18,12 @@
     cursor: pointer;
 }
 
-.pagination span:hover {
+.pagination button {
+    background: transparent;
+}
+
+.pagination span:hover,
+.pagination button:hover {
     background: var(--blue);
     color: var(--light);
 }
