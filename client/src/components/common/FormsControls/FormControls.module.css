@@ -1,7 +1,15 @@
+.formControl{
+    position: relative;
+    flex: 1 1 auto;
+}
+
 .formControl textarea,
 .formControl input {
-    padding: 8px;
+    padding: 0 8px;
+    border: 1px solid var(--gray);
     border-radius: 5px;
+    width: 100%;
+    min-width: 50%;
 }
 
 .formControl.error textarea,

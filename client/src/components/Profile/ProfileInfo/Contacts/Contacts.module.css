@@ -1,0 +1,21 @@
+.contacts__item {
+    display: flex;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.contacts__item:last-child {
+    margin: 0;
+}
+
+.contacts__item span {
+    margin-right: 10px;
+}
+
+.contacts__item input {
+}
+
+.error {
+    color: red;
+    border: 1px solid red;
+}

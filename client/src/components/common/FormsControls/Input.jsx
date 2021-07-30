@@ -2,7 +2,7 @@ import React from 'react';
 import cls from './FormControls.module.css'
 
 const FormControl = (props) => {
-    const {input, meta: {touched, error, warning}, ...restProps} = props
+    const {input, meta: {touched, error}, ...restProps} = props
     const hasError = touched && error
 
     return (

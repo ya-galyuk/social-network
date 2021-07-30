@@ -1,52 +1,35 @@
 import React from 'react';
 import cls from './ProfileInfo.module.css'
 import Preloader from "../../common/Preloader/Preloader";
-import ProfileStatus from "./ProfileStatus";
-import {v4 as uuidv4} from 'uuid';
-import Education from "./Education/Education";
-import Contact from "./Contact/Contact";
+import AboutContainer from "./About/AboutContainer";
+import Educations from "./Educations/Educations";
+import Details from "./Details/Details";
+import Avatar from "./Avatar/Avatar";
+import ContactsContainer from "./Contacts/ContactsContainer";
 
 const ProfileInfo = (props) => {
-    const {profile, status, updateUserProfile} = props
+    const {profile, status, isOwner, updateUserProfile, savePhoto, saveProfileContacts, saveProfileAbout} = props
 
     if (!profile) {
         return <Preloader/>
     }
 
-    const contactElements = profile.contactInfo.map(contact => <Contact key={uuidv4()} contact={contact}/>)
-    const educationElements = profile.educations.map(education => <Education key={uuidv4()} education={education}/>)
-
     return (
         <div className={cls.info}>
-            <div className={cls.info__avatar}>
-                <img className={cls.info__img} src={profile.photos.small} alt=""/>
-            </div>
+            <Avatar isOwner={isOwner} photos={profile.photos} savePhoto={savePhoto}/>
 
-            <div className={cls.details}>
-                <div className={cls.details__fullname}>{profile.fullName}</div>
-                {profile.lookingForAJob
-                    ? <p className={cls.details__description}>{profile.lookingForAJobDescription}</p>
-                    : undefined
-                }
-                <ProfileStatus status={status} updateUserProfile={updateUserProfile}/>
-            </div>
+            <Details fullName={profile.fullName} status={status} job={profile.job}
+                     updateUserProfile={updateUserProfile}/>
 
-            <div className={cls.contacts}>
-                <div className={cls.contacts__title}>Contact Info</div>
-                {contactElements}
-            </div>
+            <ContactsContainer profile={profile} isOwner={isOwner} saveProfileContacts={saveProfileContacts}/>
 
-            <div className={cls.about}>
-                <div className={cls.about__title}>About</div>
-                <p className={cls.about__description}>{profile.about}</p>
-            </div>
+            <AboutContainer profile={profile} isOwner={isOwner} saveProfileAbout={saveProfileAbout}/>
 
-            <div className={cls.educations}>
-                <div className={cls.educations__title}>Educations</div>
-                {educationElements}
-            </div>
+            <Educations educations={profile.educations}/>
         </div>
     );
 };
 
 export default ProfileInfo;
+
+// TODO: add editMode for Educations and Details

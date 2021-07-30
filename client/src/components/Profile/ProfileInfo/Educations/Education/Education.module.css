@@ -3,6 +3,10 @@
     display: flex;
 }
 
+.educations__item:hover {
+    background: rgba(0, 0, 0, .05);
+}
+
 .educations__item:last-child {
     margin: 0;
 }

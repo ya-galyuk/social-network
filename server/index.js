@@ -3,7 +3,9 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
+const multer = require('multer');
 const store = require('./store.json');
+const path = require("path");
 
 const app = express()
 const PORT = process.env.PORT || 5000;
@@ -11,15 +13,30 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json())
 
 const whitelist = [process.env.CLIENT_URL, "https://ya-galyuk.github.io"]
+
 app.use(cors({
     credentials: true,
     origin: (origin, callback) => {
         if (whitelist.indexOf(origin) !== -1) {
-            callback(null, true)
+            return callback(null, true)
         }
-        callback(null, false)
+        return callback(null, false)
     }
 }))
+
+app.use('/uploads', express.static('uploads'))
+
+const storageConfig = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "uploads");
+    },
+    filename: (req, file, cb) => {
+        const fileName = file.fieldname + '-' + Date.now() + path.extname(file.originalname)
+        cb(null, fileName);
+    }
+});
+
+const upload = multer({storage: storageConfig}).single("image");
 
 // auth only
 app.get('/api/users', (req, res) => {
@@ -55,10 +72,41 @@ app.get('/api/profile/:userId', (req, res) => {
 app.get('/api/profile/status/:userId', (req, res) => {
     return res.status(200).send({...store.status})
 })
+// TODO: Add router for different profile updates (about, details, educations, contacts)
+app.put('/api/profile', (req, res) => {
+    const {userId} = req.params
+    return res.status(200).send({
+        profile: {...store.profiles[0], contacts: req.body.data},
+        messages: [{
+            "Email": "error email",
+            "Telegram": "error tg",
+            "GitHub": "error git",
+        }],
+        // messages: [],
+        resultCode: 1,
+    })
+})
 
 app.put('/api/profile/status', (req, res) => {
     const {status} = req.body
-    return res.status(200).send({...store.status, status})
+    return res.status(200).send({...store.profile.status, status})
+})
+
+app.put('/api/profile/photo', (req, res, next) => {
+    upload(req, res, function (err) {
+        if (err instanceof multer.MulterError) {
+            console.log("MulterError", err)
+            return res.status(500)
+        } else if (err) {
+            console.log("Error", err)
+            return res.status(500)
+        }
+        const filePath = ` http://localhost:${PORT}/` + req.file.path
+        return res.status(200).send({
+            ...store.profile.photos,
+            photos: {...store.profile.photos.photos, small: filePath}
+        })
+    })
 })
 
 app.post('/api/auth/me', (req, res) => {
