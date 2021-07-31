@@ -1,7 +1,7 @@
 import React, {Component, lazy, Suspense} from "react";
 import {connect} from "react-redux";
 import {compose} from "redux";
-import {Switch, withRouter} from "react-router";
+import {Redirect, Switch, withRouter} from "react-router";
 import {Route} from 'react-router-dom'
 import {setIsInitialized} from "./redux/reducer/app-reducer";
 import HeaderContainer from "./components/Header/HeaderContainer";
@@ -28,10 +28,12 @@ class App extends Component {
                 <main className="content">
                     <Suspense fallback={<Preloader/>}>
                         <Switch>
+                            <Route exact path='/' render={() => <Redirect to={'/profile'}/>}/>
                             <Route path='/messages' render={() => <MessagesContainer/>}/>
                             <Route path='/profile/:userId?' render={() => <ProfileContainer/>}/>
                             <Route path='/users' render={() => <UsersContainer/>}/>
                             <Route path='/login' render={() => <LoginPage/>}/>
+                            <Route path='*' render={() => <div>404</div>}/>
                         </Switch>
                     </Suspense>
                 </main>
