@@ -1,8 +1,9 @@
 import {v4 as uuidv4} from 'uuid';
+import {InitialStateType, SendMessageActionType} from "../../types/DialogsTypes";
 
-const SEND_MESSAGE = 'dialogs/SEND_MESSAGE';
+export const SEND_MESSAGE = 'dialogs/SEND_MESSAGE';
 
-let initialState = {
+let initialState: InitialStateType = {
     dialogs: [
         {id: '1', username: 'Username 1',},
         {id: '2', username: 'Username 2',},
@@ -21,13 +22,13 @@ let initialState = {
     ],
 }
 
-const dialogsReducer = (state = initialState, action) => {
+const dialogsReducer = (state = initialState, action: any): InitialStateType => {
     switch (action.type) {
         case SEND_MESSAGE: {
             let newMessage = {
                 id: uuidv4(),
                 link: 'http://www.landscapingbydesign.com.au/wp-content/uploads/2018/11/img-person-placeholder.jpg',
-                text: action.newMessage,
+                text: action.payload.newMessage,
             }
             return {...state, messages: [...state.messages, newMessage]};
         }
@@ -37,6 +38,6 @@ const dialogsReducer = (state = initialState, action) => {
     }
 }
 
-export const sendMessage = (newMessage) => ({type: SEND_MESSAGE, newMessage})
+export const sendMessage = (newMessage: string): SendMessageActionType => ({type: SEND_MESSAGE, payload: {newMessage}})
 
 export default dialogsReducer
