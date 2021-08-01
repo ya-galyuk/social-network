@@ -595,10 +595,12 @@
     "status": {
       "messages": [],
       "resultCode": 0,
-      "status": "status message"
+      "data": {
+        "status": "status message"
+      }
     },
     "photos": {
-      "photos": {
+      "data": {
         "small": "",
         "large": ""
       },
@@ -608,8 +610,8 @@
   },
   "auth": {
     "me": {
-      "user": {
-        "id": 1,
+      "data": {
+        "userId": 1,
         "email": "email",
         "login": "username"
       },
@@ -617,16 +619,14 @@
       "resultCode": 0
     },
     "login": {
-      "user": {
-        "id": 1,
-        "email": "email",
-        "login": "username"
+      "data": {
+        "userId": 1
       },
       "messages": [],
       "resultCode": 0
     },
     "logout": {
-      "user": {},
+      "data": {},
       "messages": [],
       "resultCode": 0
     }

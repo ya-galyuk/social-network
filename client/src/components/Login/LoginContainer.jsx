@@ -9,7 +9,7 @@ const LoginContainer = (props) => {
     const {isAuth, login} = props
 
     const onSubmit = (formData) => {
-        login(...formData)
+        login(formData.email, formData.password, formData.rememberMe)
     }
 
     if (isAuth) {

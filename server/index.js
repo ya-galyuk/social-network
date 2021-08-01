@@ -53,8 +53,12 @@ app.get('/api/users', (req, res) => {
     let users = store.users.slice(start, end)
 
     res.send({
-        users: {items: users},
-        totalCount
+        data: {
+            items: users,
+            totalCount
+        },
+        messages: [],
+        resultCode: 0,
     })
 })
 
@@ -63,20 +67,29 @@ app.get('/api/profile/:userId', (req, res) => {
 
     for (const profile of store.profiles) {
         if (profile.userId === userId) {
-            return res.send(profile)
+            return res.send({
+                data: profile,
+                messages: [],
+                resultCode: 0,
+            })
         }
     }
-    return res.status(200).send({})
+    return res.status(200).send({
+        data: {},
+        messages: [],
+        resultCode: 0,
+    })
 })
 
 app.get('/api/profile/status/:userId', (req, res) => {
-    return res.status(200).send({...store.status})
+    return res.status(200).send({...store.profile.status})
 })
+
 // TODO: Add router for different profile updates (about, details, educations, contacts)
 app.put('/api/profile', (req, res) => {
     const {userId} = req.params
     return res.status(200).send({
-        profile: {...store.profiles[0], contacts: req.body.data},
+        data: {...store.profiles[0], contacts: req.body.data},
         messages: [{
             "Email": "error email",
             "Telegram": "error tg",
@@ -89,7 +102,13 @@ app.put('/api/profile', (req, res) => {
 
 app.put('/api/profile/status', (req, res) => {
     const {status} = req.body
-    return res.status(200).send({...store.profile.status, status})
+    return res.status(200).send({
+        messages: [],
+        resultCode: 0,
+        data: {
+            status: status
+        }
+    })
 })
 
 app.put('/api/profile/photo', (req, res, next) => {
@@ -103,8 +122,11 @@ app.put('/api/profile/photo', (req, res, next) => {
         }
         const filePath = ` http://localhost:${PORT}/` + req.file.path
         return res.status(200).send({
-            ...store.profile.photos,
-            photos: {...store.profile.photos.photos, small: filePath}
+            data: {
+                small: filePath, large: ''
+            },
+            messages: [],
+            resultCode: 0,
         })
     })
 })

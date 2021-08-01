@@ -4,7 +4,9 @@ import {
     SET_USER_PHOTO,
     SET_USER_PROFILE,
     SET_USER_STATUS
-} from "../redux/reducer/profile-reducer";
+} from "../../redux/reducer/profile-reducer";
+import {ThunkAction} from "redux-thunk";
+import {AppStateType} from "../../redux/redux-store";
 
 export type PostsType = {
     id: string,
@@ -59,8 +61,15 @@ export type ProfileType = {
 
 export type InitialStateType = {
     posts: Array<PostsType>,
-    profile: Array<ProfileType> | null
+    profile: ProfileType | null
 }
+
+export type ActionsType =
+    AddPostActionType
+    | DeletePostActionType
+    | SetUserProfileActionType
+    | SetUserStatusActionType
+    | SetUserPhotoActionType
 
 type AddPostActionPayloadType = {
     postMessage: string
@@ -102,3 +111,5 @@ export type SetUserPhotoActionType = {
     type: typeof SET_USER_PHOTO
     payload: SetUserPhotoActionPayloadType
 }
+
+export type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsType>

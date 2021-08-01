@@ -11,21 +11,23 @@ const subtotalSelector = createSelector(
   items => items.reduce((subtotal, item) => subtotal + item.value, 0)
 )*/
 
-export const getUsers = state => {
+import {AppStateType} from "../redux-store";
+
+export const getUsers = (state: AppStateType) => {
     return state.usersPage.users;
 }
-export const getPageSize = state => {
+export const getPageSize = (state: AppStateType) => {
     return state.usersPage.pageSize;
 }
-export const getTotalCount = state => {
+export const getTotalCount = (state: AppStateType) => {
     return state.usersPage.totalCount;
 }
-export const getCurrentPage = state => {
+export const getCurrentPage = (state: AppStateType) => {
     return state.usersPage.currentPage;
 }
-export const getIsLoading = state => {
+export const getIsLoading = (state: AppStateType) => {
     return state.usersPage.isLoading;
 }
-export const getFollowingInProgress = state => {
+export const getFollowingInProgress = (state: AppStateType) => {
     return state.usersPage.followingInProgress;
 }

@@ -3,12 +3,12 @@ import cls from "./Avatar.module.css";
 import userPhoto from "../../../../assets/images/user.png";
 
 const Avatar = (props) => {
-    const {isOwner, photos, savePhoto} = props
+    const {isOwner, photos, updatePhoto} = props
 
     const onPhotoSelected = (e) => {
         const files = e.target.files
         if (files.length) {
-            savePhoto(files[0])
+            updatePhoto(files[0])
         }
     }
 

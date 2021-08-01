@@ -5,7 +5,7 @@ import {
     getUserProfile,
     getUserStatus,
     updateUserProfile,
-    savePhoto,
+    updatePhoto,
     saveProfileContacts,
     saveProfileAbout
 } from "../../redux/reducer/profile-reducer";
@@ -35,9 +35,9 @@ class ProfileContainer extends React.Component {
     }
 
     render() {
-        const {match, profile, status, updateUserProfile, savePhoto, saveProfileContacts, saveProfileAbout, ...restProps} = this.props
+        const {match, profile, status, updateUserProfile, updatePhoto, saveProfileContacts, saveProfileAbout, ...restProps} = this.props
         return <Profile {...restProps} profile={profile} status={status} isOwner={!match.params.userId}
-                        updateUserProfile={updateUserProfile} savePhoto={savePhoto}
+                        updateUserProfile={updateUserProfile} updatePhoto={updatePhoto}
                         saveProfileContacts={saveProfileContacts} saveProfileAbout={saveProfileAbout}/>
     }
 }
@@ -54,7 +54,7 @@ export default compose(
         getUserProfile,
         getUserStatus,
         updateUserProfile,
-        savePhoto,
+        updatePhoto,
         saveProfileContacts,
         saveProfileAbout
     }),

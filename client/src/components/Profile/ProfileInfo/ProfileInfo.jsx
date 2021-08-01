@@ -8,7 +8,7 @@ import Avatar from "./Avatar/Avatar";
 import ContactsContainer from "./Contacts/ContactsContainer";
 
 const ProfileInfo = (props) => {
-    const {profile, status, isOwner, updateUserProfile, savePhoto, saveProfileContacts, saveProfileAbout} = props
+    const {profile, status, isOwner, updateUserProfile, updatePhoto, saveProfileContacts, saveProfileAbout} = props
 
     if (!profile) {
         return <Preloader/>
@@ -16,7 +16,7 @@ const ProfileInfo = (props) => {
 
     return (
         <div className={cls.info}>
-            <Avatar isOwner={isOwner} photos={profile.photos} savePhoto={savePhoto}/>
+            <Avatar isOwner={isOwner} photos={profile.photos} updatePhoto={updatePhoto}/>
 
             <Details fullName={profile.fullName} status={status} job={profile.job}
                      updateUserProfile={updateUserProfile}/>

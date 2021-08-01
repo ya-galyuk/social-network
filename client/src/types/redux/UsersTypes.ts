@@ -5,15 +5,17 @@ import {
     SET_USERS, TOGGLE_IS_FOLLOWING_PROGRESS,
     TOGGLE_IS_LOADING,
     UNFOLLOW
-} from "../redux/reducer/users-reducer";
+} from "../../redux/reducer/users-reducer";
 import {ProfilePhotosType} from "./ProfileTypes";
+import {ThunkAction} from "redux-thunk";
+import {AppStateType} from "../../redux/redux-store";
 
 type UsersLocationType = {
     country: string,
     city: string
 }
 
-export type UsersType = {
+export type UserType = {
     id: string,
     fullName: string,
     about: string,
@@ -23,7 +25,7 @@ export type UsersType = {
     followed: boolean
 }
 export type InitialStateType = {
-    users: Array<UsersType>,
+    users: Array<UserType>,
     pageSize: number,
     totalCount: number,
     currentPage: number,
@@ -31,8 +33,17 @@ export type InitialStateType = {
     followingInProgress: Array<string> // array of users ids
 }
 
+export type ActionsType =
+    SetUsersActionType
+    | OnFollowActionType
+    | OnUnfollowActionType
+    | SetCurrentPageActionType
+    | SetTotalCountActionType
+    | ToggleIsLoadingActionType
+    | ToggleIsFollowingInProgressActionType
+
 type SetUsersActionPayloadType = {
-    users: Array<UsersType>
+    users: Array<UserType>
 }
 export type SetUsersActionType = {
     type: typeof SET_USERS
@@ -83,3 +94,5 @@ export type ToggleIsFollowingInProgressActionType = {
     type: typeof TOGGLE_IS_FOLLOWING_PROGRESS
     payload: ToggleIsFollowingInProgressActionPayloadType
 }
+
+export type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsType>
