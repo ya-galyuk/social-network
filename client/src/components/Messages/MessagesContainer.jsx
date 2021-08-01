@@ -1,4 +1,4 @@
-import {sendMessage} from "../../redux/reducer/dialogs-reducer";
+import {actions} from "../../redux/reducer/dialogs-reducer";
 import Messages from "./Messages";
 import {connect} from "react-redux";
 import {compose} from "redux";
@@ -9,6 +9,6 @@ let mapStateToProps = (state) => ({
 
 export default compose(
     connect(mapStateToProps, {
-        sendMessage
+        sendMessage: actions.sendMessage
     }),
 )(Messages);

@@ -6,7 +6,7 @@ import authReducer from "./reducer/auth-reducer";
 import thunkMiddleware from "redux-thunk"
 import {reducer as formReducer} from "redux-form"
 import appReducer from "./reducer/app-reducer";
-import { composeWithDevTools } from 'redux-devtools-extension';
+import {composeWithDevTools} from 'redux-devtools-extension';
 
 let rootReducers = combineReducers({
     profilePage: profileReducer,
@@ -19,6 +19,9 @@ let rootReducers = combineReducers({
 
 type RootReducerType = typeof rootReducers
 export type AppStateType = ReturnType<RootReducerType>
+
+type PropsTypes<T> = T extends { [key: string]: infer U } ? U : never
+export type InferActionType<T extends { [key: string]: (...args: any[]) => any }> = ReturnType<PropsTypes<T>>
 
 // @ts-ignore
 let store = createStore(rootReducers, composeWithDevTools(applyMiddleware(thunkMiddleware)));

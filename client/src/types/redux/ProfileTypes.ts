@@ -1,13 +1,3 @@
-import {
-    ADD_POST,
-    DELETE_POST,
-    SET_USER_PHOTO,
-    SET_USER_PROFILE,
-    SET_USER_STATUS
-} from "../../redux/reducer/profile-reducer";
-import {ThunkAction} from "redux-thunk";
-import {AppStateType} from "../../redux/redux-store";
-
 export type PostsType = {
     id: string,
     time: string,
@@ -58,58 +48,3 @@ export type ProfileType = {
     educations: Array<ProfileEducationsType>,
     job: ProfileJobType
 }
-
-export type InitialStateType = {
-    posts: Array<PostsType>,
-    profile: ProfileType | null
-}
-
-export type ActionsType =
-    AddPostActionType
-    | DeletePostActionType
-    | SetUserProfileActionType
-    | SetUserStatusActionType
-    | SetUserPhotoActionType
-
-type AddPostActionPayloadType = {
-    postMessage: string
-}
-export type AddPostActionType = {
-    type: typeof ADD_POST
-    payload: AddPostActionPayloadType
-}
-
-type DeletePostActionPayloadType = {
-    postId: string
-}
-export type DeletePostActionType = {
-    type: typeof DELETE_POST
-    payload: DeletePostActionPayloadType
-}
-
-type SetUserProfileActionPayloadType = {
-    profile: ProfileType
-}
-export type SetUserProfileActionType = {
-    type: typeof SET_USER_PROFILE
-    payload: SetUserProfileActionPayloadType
-}
-
-type SetUserStatusActionPayloadType = {
-    status: string
-}
-export type SetUserStatusActionType = {
-    type: typeof SET_USER_STATUS
-    payload: SetUserStatusActionPayloadType
-}
-
-// TODO: check photos type
-type SetUserPhotoActionPayloadType = {
-    photos: ProfilePhotosType
-}
-export type SetUserPhotoActionType = {
-    type: typeof SET_USER_PHOTO
-    payload: SetUserPhotoActionPayloadType
-}
-
-export type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsType>

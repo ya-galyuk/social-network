@@ -1,7 +1,11 @@
 import {v4 as uuidv4} from 'uuid';
-import {ActionsType, InitialStateType, SendMessageActionType} from "../../types/redux/DialogsTypes";
+import {IDialogs, IMessages} from "../../types/redux/DialogsTypes";
+import {InferActionType} from "../redux-store";
 
-export const SEND_MESSAGE = 'dialogs/SEND_MESSAGE';
+type InitialStateType = {
+    dialogs: Array<IDialogs>,
+    messages: Array<IMessages>
+}
 
 let initialState: InitialStateType = {
     dialogs: [
@@ -22,9 +26,9 @@ let initialState: InitialStateType = {
     ],
 }
 
-const dialogsReducer = (state = initialState, action: ActionsType): InitialStateType => {
+const dialogsReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
-        case SEND_MESSAGE: {
+        case "SEND_MESSAGE": {
             let newMessage = {
                 id: uuidv4(),
                 link: 'http://www.landscapingbydesign.com.au/wp-content/uploads/2018/11/img-person-placeholder.jpg',
@@ -37,7 +41,9 @@ const dialogsReducer = (state = initialState, action: ActionsType): InitialState
         }
     }
 }
+type ActionsTypes = InferActionType<typeof actions>
 
-export const sendMessage = (newMessage: string): SendMessageActionType => ({type: SEND_MESSAGE, payload: {newMessage}})
-
+export const actions = {
+    sendMessage: (newMessage: string) => ({type: 'SEND_MESSAGE', payload: {newMessage}} as const)
+}
 export default dialogsReducer

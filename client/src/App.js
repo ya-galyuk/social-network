@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {compose} from "redux";
 import {Redirect, Switch, withRouter} from "react-router";
 import {Route} from 'react-router-dom'
-import {setIsInitialized} from "./redux/reducer/app-reducer";
+import {actions} from "./redux/reducer/app-reducer";
 import HeaderContainer from "./components/Header/HeaderContainer";
 import Navbar from "./components/Navbar/Navbar";
 import Preloader from "./components/common/Preloader/Preloader";
@@ -48,5 +48,7 @@ const mapStateToProps = (state) => ({
 
 export default compose(
     withRouter,
-    connect(mapStateToProps, {setIsInitialized})
+    connect(mapStateToProps, {
+        setIsInitialized: actions.setIsInitialized
+    })
 )(App);
