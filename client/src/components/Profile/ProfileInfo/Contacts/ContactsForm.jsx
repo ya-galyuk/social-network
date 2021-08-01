@@ -1,8 +1,8 @@
 import React from 'react';
 import cls from "./Contacts.module.css";
 import clsProfile from "../ProfileInfo.module.css";
-import {Field, reduxForm} from "redux-form";
-import {Input} from "../../../common/FormsControls/Input";
+import {reduxForm} from "redux-form";
+import {createField, Input} from "../../../common/FormsControls/FormControls";
 import {v4 as uuidv4} from "uuid";
 
 let ContactsForm = (props) => {
@@ -11,7 +11,7 @@ let ContactsForm = (props) => {
     const contactElements = Object.keys(profile.contacts).map(key =>
         <div className={cls.contacts__item} key={uuidv4()}>
             <span>{key}: </span>
-            <Field component={Input} name={key} type="text" placeholder={key}/>
+            {createField(key, "text", Input, [], key)}
         </div>)
 
     return (

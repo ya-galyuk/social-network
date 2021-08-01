@@ -1,7 +1,7 @@
 import React from 'react';
 import cls from "../ProfileInfo.module.css";
-import {Field, reduxForm} from "redux-form";
-import {Textarea} from "../../../common/FormsControls/Input";
+import {reduxForm} from "redux-form";
+import {createField, Textarea} from "../../../common/FormsControls/FormControls";
 
 const AboutForm = (props) => {
     const {handleSubmit} = props
@@ -9,7 +9,7 @@ const AboutForm = (props) => {
     return (
         <form className={cls.about} onSubmit={handleSubmit}>
             <h3 className={cls.about__title}>About</h3>
-            <Field component={Textarea} name={"about"} type={"text"} placeholder={"Your text ..."}/>
+            {createField("about", "text", Textarea, [], "Your text ...")}
             <button className={cls.btn__save}>save</button>
         </form>
     );

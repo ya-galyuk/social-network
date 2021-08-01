@@ -1,15 +1,14 @@
 import React from 'react';
 import cls from "./Posts.module.css";
-import {Field, reduxForm} from "redux-form";
-import {Textarea} from "../../common/FormsControls/Input";
+import {reduxForm} from "redux-form";
+import {createField, Textarea} from "../../common/FormsControls/FormControls";
 
 const PostForm = (props) => {
     const {handleSubmit} = props
     return (
         <form className={cls.posts__form} onSubmit={handleSubmit}>
             <div>
-                <Field className={cls.posts__textarea} name={"postMessage"} component={Textarea}
-                       placeholder={"Post message"}/>
+                {createField("postMessage", "text", Textarea, [], "Post message", {className: cls.posts__textarea})}
             </div>
             <button className={cls.posts__btn}>Public</button>
         </form>
