@@ -13,15 +13,34 @@ import {
     getPageSize,
     getTotalCount, getUsers
 } from "../../redux/selectors/users-selectors";
+import {UserType} from "../../types/redux/UsersTypes";
+import {AppStateType} from "../../redux/redux-store";
 
-class UsersContainer extends React.Component {
+type MapStatePropsType = {
+    users: Array<UserType>
+    currentPage: number
+    pageSize: number
+    totalCount: number
+    isLoading: boolean
+    followingInProgress: Array<string>
+}
+
+type DispatchStatePropsType = {
+    follow: (userId: string) => void
+    unfollow: (userId: string) => void
+    getUsers: (currentPage: number, pageSize: number) => void
+}
+
+type PropsType = MapStatePropsType & DispatchStatePropsType
+
+class UsersContainer extends React.Component<PropsType> {
 
     componentDidMount() {
         const {currentPage, pageSize, getUsers} = this.props
         getUsers(currentPage, pageSize)
     }
 
-    onPageClick = (pageNumber) => {
+    onPageClick = (pageNumber: number): void => {
         const {pageSize, getUsers} = this.props
         getUsers(pageNumber, pageSize)
     }
@@ -43,7 +62,7 @@ class UsersContainer extends React.Component {
     }
 }
 
-let mapStateToProps = (state) => ({
+let mapStateToProps = (state: AppStateType): MapStatePropsType => ({
     users: getUsers(state),
     pageSize: getPageSize(state),
     totalCount: getTotalCount(state),
@@ -53,7 +72,7 @@ let mapStateToProps = (state) => ({
 })
 
 export default compose(
-    connect(mapStateToProps, {
+    connect<MapStatePropsType, DispatchStatePropsType, {}, AppStateType>(mapStateToProps, {
         follow, unfollow,
         getUsers: requestUsers
     }),

@@ -1,4 +1,6 @@
-import {SET_USER_DATA} from "../redux/reducer/auth-reducer";
+import {SET_USER_DATA} from "../../redux/reducer/auth-reducer";
+import {ThunkAction} from "redux-thunk";
+import {AppStateType} from "../../redux/redux-store";
 
 export type InitialStateType = {
     userId: string | null,
@@ -7,6 +9,8 @@ export type InitialStateType = {
     isAuth: boolean,
     isLoading: boolean
 }
+
+export type ActionsType = SetAuthUserDataActionType
 
 type SetAuthUserDataActionPayloadType = {
     userId: string | null,
@@ -19,3 +23,5 @@ export type SetAuthUserDataActionType = {
     type: typeof SET_USER_DATA,
     payload: SetAuthUserDataActionPayloadType
 }
+
+export type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsType>

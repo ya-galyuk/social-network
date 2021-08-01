@@ -1,5 +1,5 @@
 import {v4 as uuidv4} from 'uuid';
-import {InitialStateType, SendMessageActionType} from "../../types/DialogsTypes";
+import {ActionsType, InitialStateType, SendMessageActionType} from "../../types/redux/DialogsTypes";
 
 export const SEND_MESSAGE = 'dialogs/SEND_MESSAGE';
 
@@ -22,7 +22,7 @@ let initialState: InitialStateType = {
     ],
 }
 
-const dialogsReducer = (state = initialState, action: any): InitialStateType => {
+const dialogsReducer = (state = initialState, action: ActionsType): InitialStateType => {
     switch (action.type) {
         case SEND_MESSAGE: {
             let newMessage = {
