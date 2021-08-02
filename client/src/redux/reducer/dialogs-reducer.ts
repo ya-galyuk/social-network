@@ -2,16 +2,11 @@ import {v4 as uuidv4} from 'uuid';
 import {IDialogs, IMessages} from "../../types/redux/DialogsTypes";
 import {InferActionType} from "../redux-store";
 
-type InitialStateType = {
-    dialogs: Array<IDialogs>,
-    messages: Array<IMessages>
-}
-
-let initialState: InitialStateType = {
+let initialState = {
     dialogs: [
         {id: '1', username: 'Username 1',},
         {id: '2', username: 'Username 2',},
-    ],
+    ] as Array<IDialogs>,
     messages: [
         {
             id: '1',
@@ -23,12 +18,12 @@ let initialState: InitialStateType = {
             link: 'http://www.landscapingbydesign.com.au/wp-content/uploads/2018/11/img-person-placeholder.jpg',
             text: 'Message text 2',
         },
-    ],
+    ] as Array<IMessages>,
 }
 
 const dialogsReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
-        case "SEND_MESSAGE": {
+        case "DIALOGS/SEND_MESSAGE": {
             let newMessage = {
                 id: uuidv4(),
                 link: 'http://www.landscapingbydesign.com.au/wp-content/uploads/2018/11/img-person-placeholder.jpg',
@@ -41,9 +36,12 @@ const dialogsReducer = (state = initialState, action: ActionsTypes): InitialStat
         }
     }
 }
-type ActionsTypes = InferActionType<typeof actions>
 
 export const actions = {
-    sendMessage: (newMessage: string) => ({type: 'SEND_MESSAGE', payload: {newMessage}} as const)
+    sendMessage: (newMessage: string) => ({type: 'DIALOGS/SEND_MESSAGE', payload: {newMessage}} as const)
 }
+
 export default dialogsReducer
+
+type InitialStateType = typeof initialState
+type ActionsTypes = InferActionType<typeof actions>

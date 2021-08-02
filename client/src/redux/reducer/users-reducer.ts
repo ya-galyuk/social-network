@@ -1,49 +1,39 @@
-import usersAPI from "../../api/usersAPI";
+import usersAPI from "../../api/users-api";
 import {updateObjectInArray} from "../../utils/helpers/object-helper";
 import {UserType} from "../../types/redux/UsersTypes";
 import {ResultCodes} from "../../enums";
-import {ThunkAction} from "redux-thunk";
-import {AppStateType, InferActionType} from "../redux-store";
+import {BaseThunkType, InferActionType} from "../redux-store";
 
-type InitialStateType = {
-    users: Array<UserType>,
-    pageSize: number,
-    totalCount: number,
-    currentPage: number,
-    isLoading: boolean,
-    followingInProgress: Array<string> // array of users ids
-}
-
-let initialState: InitialStateType = {
-    users: [],
+let initialState = {
+    users: [] as Array<UserType>,
     pageSize: 3,
     totalCount: 0,
     currentPage: 1,
     isLoading: false,
-    followingInProgress: []
+    followingInProgress: [] as Array<string> // array of users ids
 }
 
-const usersReducer = (state: InitialStateType = initialState, action: ActionsTypes): InitialStateType => {
+const usersReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
-        case "SET_USERS":
-        case "SET_CURRENT_PAGE":
-        case "SET_TOTAL_COUNT":
-        case "TOGGLE_IS_LOADING": {
+        case "USERS/SET_USERS":
+        case "USERS/SET_CURRENT_PAGE":
+        case "USERS/SET_TOTAL_COUNT":
+        case "USERS/TOGGLE_IS_LOADING": {
             return {...state, ...action.payload};
         }
-        case "FOLLOW" : {
+        case "USERS/FOLLOW" : {
             return {
                 ...state,
                 users: updateObjectInArray(state.users, action.payload.userId, "id", {followed: true})
             };
         }
-        case "UNFOLLOW": {
+        case "USERS/UNFOLLOW": {
             return {
                 ...state,
                 users: updateObjectInArray(state.users, action.payload.userId, "id", {followed: false})
             };
         }
-        case "TOGGLE_IS_FOLLOWING_PROGRESS": {
+        case "USERS/TOGGLE_IS_FOLLOWING_PROGRESS": {
             return {
                 ...state,
                 followingInProgress: action.payload.isProgress
@@ -57,31 +47,27 @@ const usersReducer = (state: InitialStateType = initialState, action: ActionsTyp
     }
 }
 
-type ActionsTypes = InferActionType<typeof actions>
-
 export const actions = {
-    setUsers: (users: Array<UserType>) => ({type: 'SET_USERS', payload: {users}} as const),
-    onFollow: (userId: string) => ({type: 'FOLLOW', payload: {userId}} as const),
-    onUnfollow: (userId: string) => ({type: 'UNFOLLOW', payload: {userId}} as const),
+    setUsers: (users: Array<UserType>) => ({type: 'USERS/SET_USERS', payload: {users}} as const),
+    onFollow: (userId: string) => ({type: 'USERS/FOLLOW', payload: {userId}} as const),
+    onUnfollow: (userId: string) => ({type: 'USERS/UNFOLLOW', payload: {userId}} as const),
     setCurrentPage: (currentPage: number) => ({
-        type: 'SET_CURRENT_PAGE',
+        type: 'USERS/SET_CURRENT_PAGE',
         payload: {currentPage}
     } as const),
     setTotalCount: (totalCount: number) => ({
-        type: 'SET_TOTAL_COUNT',
+        type: 'USERS/SET_TOTAL_COUNT',
         payload: {totalCount}
     } as const),
     toggleIsLoading: (isLoading: boolean) => ({
-        type: 'TOGGLE_IS_LOADING',
+        type: 'USERS/TOGGLE_IS_LOADING',
         payload: {isLoading}
     } as const),
     toggleIsFollowingInProgress: (isProgress: boolean, userId: string) => ({
-        type: 'TOGGLE_IS_FOLLOWING_PROGRESS',
+        type: 'USERS/TOGGLE_IS_FOLLOWING_PROGRESS',
         payload: {isProgress, userId}
     } as const),
 }
-
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
 
 export const requestUsers = (page: number, pageSize: number): ThunkType => async (dispatch) => {
     dispatch(actions.toggleIsLoading(true))
@@ -114,3 +100,7 @@ export const unfollow = (userId: string): ThunkType => async (dispatch) => {
 }
 
 export default usersReducer
+
+type InitialStateType = typeof initialState
+type ActionsTypes = InferActionType<typeof actions>
+type ThunkType = BaseThunkType<ActionsTypes>

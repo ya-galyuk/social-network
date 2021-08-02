@@ -1,43 +1,41 @@
 import {v4 as uuidv4} from 'uuid';
-import profileAPI from "../../api/profileAPI";
-import {stopSubmit} from "redux-form";
+import profileAPI from "../../api/profile-api";
+import {FormAction, stopSubmit} from "redux-form";
 import {PostsType, ProfilePhotosType, ProfileType} from "../../types/redux/ProfileTypes";
 import {ResultCodes} from "../../enums";
-import {AppStateType, InferActionType} from "../redux-store";
-import {ThunkAction} from "redux-thunk";
+import {BaseThunkType, InferActionType} from "../redux-store";
 
-type InitialStateType = {
-    posts: Array<PostsType>,
-    profile: ProfileType | null
-}
-
-let initialState: InitialStateType = {
+let initialState = {
     posts: [
         {id: '1', time: 'time-1', text: 'post text 1',},
         {id: '2', time: 'time-2', text: 'Post text 2',},
-    ],
-    profile: null
+    ] as Array<PostsType>,
+    profile: null as (ProfileType | null)
 }
 
 const profileReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
-        case "ADD_POST" : {
+        case "PROFILE/ADD_POST" : {
             let newPost = {id: uuidv4(), time: new Date().toISOString(), text: action.payload.postMessage,}
             return {...state, posts: [...state.posts, newPost],};
         }
-        case "DELETE_POST": {
+        case "PROFILE/DELETE_POST": {
             return {...state, posts: state.posts.filter(p => p.id !== action.payload.postId)};
         }
-        case "SET_USER_PROFILE": {
+        case "PROFILE/SET_USER_PROFILE": {
             return {...state, profile: {...state.profile, ...action.payload.profile}};
         }
-        case "SET_USER_STATUS": {
-            // @ts-ignore
-            return {...state, profile: {...state.profile, ...action.payload}};
+        case "PROFILE/SET_USER_STATUS": {
+            if (state.profile?.status) {
+                return {...state, profile: {...state.profile, ...action.payload}};
+            }
+            return {...state}
         }
-        case "SET_USER_PHOTO": {
-            // @ts-ignore
-            return {...state, profile: {...state.profile, ...action.payload}};
+        case "PROFILE/SET_USER_PHOTO": {
+            if (state.profile?.photos) {
+                return {...state, profile: {...state.profile, ...action.payload}};
+            }
+            return {...state}
         }
         default: {
             return state;
@@ -45,23 +43,19 @@ const profileReducer = (state = initialState, action: ActionsTypes): InitialStat
     }
 }
 
-type ActionsTypes = InferActionType<typeof actions>
-
 export const actions = {
-    addPost: (postMessage: string) => ({type: 'ADD_POST', payload: {postMessage}} as const),
-    deletePost: (postId: string) => ({type: 'DELETE_POST', payload: {postId}} as const),
+    addPost: (postMessage: string) => ({type: 'PROFILE/ADD_POST', payload: {postMessage}} as const),
+    deletePost: (postId: string) => ({type: 'PROFILE/DELETE_POST', payload: {postId}} as const),
     setUserProfile: (profile: ProfileType) => ({
-        type: 'SET_USER_PROFILE',
+        type: 'PROFILE/SET_USER_PROFILE',
         payload: {profile}
     } as const),
-    setUserStatus: (status: string) => ({type: 'SET_USER_STATUS', payload: {status}} as const),
+    setUserStatus: (status: string) => ({type: 'PROFILE/SET_USER_STATUS', payload: {status}} as const),
     setUserPhoto: (photos: ProfilePhotosType) => ({
-        type: 'SET_USER_PHOTO',
+        type: 'PROFILE/SET_USER_PHOTO',
         payload: {photos}
     } as const),
 }
-
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
 
 export const getUserProfile = (userId: string): ThunkType => async (dispatch) => {
     const res = await profileAPI.getProfile(userId)
@@ -84,39 +78,53 @@ export const updateUserProfile = (status: string): ThunkType => async (dispatch)
     }
 }
 
-export const updatePhoto = (file: any): ThunkType => async (dispatch) => {
+export const updatePhoto = (file: File): ThunkType => async (dispatch) => {
     const res = await profileAPI.updatePhoto(file)
     if (res.resultCode === ResultCodes.Success) {
         dispatch(actions.setUserPhoto({...res.data}))
     }
 }
 
-export const saveProfileAbout = (profile: ProfileType): ThunkType => async (dispatch: any, getState: any) => {
+export const saveProfileAbout = (profile: ProfileType): ThunkType => async (dispatch, getState) => {
     // const userId = getState().auth.userId
+    // if (!userId){
+    //     throw new Error("userId can't be null")
+    // }
     const res = await profileAPI.updateProfile(profile)
     if (res.resultCode === ResultCodes.Success) {
-        return dispatch(actions.setUserProfile({...res.data}))
-        // dispatch(getUserProfile(userId))
+        dispatch(actions.setUserProfile({...res.data}))
+        // return dispatch(getUserProfile(userId))
     }
-    let messages = res.messages.length ? res.messages[0] : "Common error"
-    dispatch(stopSubmit("edit-profile-about", {
-        about: messages,
-        _error: "email err"
-    }))
+    if (res.resultCode === ResultCodes.Error) {
+        let messages = res.messages.length ? res.messages[0] : "Common error"
+        dispatch(stopSubmit("edit-profile-about", {
+            about: messages,
+            _error: "email err"
+        }))
+    }
 }
 
-export const saveProfileContacts = (profile: ProfileType): ThunkType => async (dispatch: any, getState) => {
+export const saveProfileContacts = (profile: ProfileType): ThunkType => async (dispatch, getState) => {
     // const userId = getState().auth.userId
+    // if (!userId){
+    //     throw new Error("userId can't be null")
+    // }
     const res = await profileAPI.updateProfile(profile)
     if (res.resultCode === ResultCodes.Success) {
-        return dispatch(actions.setUserProfile({...res.data}))
+        dispatch(actions.setUserProfile({...res.data}))
         // dispatch(getUserProfile(userId))
     }
-    let messages = res.messages.length ? res.messages[0] : "Common error"
-    // @ts-ignore
-    dispatch(stopSubmit("edit-profile-contacts", {...messages, _error: "email err"}))
-    return Promise.reject({messages})
+    if (res.resultCode === ResultCodes.Error) {
+        let errors = res.messages.length ? res.messages[0] : "Common error"
+        typeof errors === "object" ? errors = {...errors} : errors = {_error: errors}
+        dispatch(stopSubmit("edit-profile-contacts", errors))
+        return Promise.reject(errors)
+    }
 }
 
 
 export default profileReducer
+
+type InitialStateType = typeof initialState
+type ActionsTypes = InferActionType<typeof actions>
+type ThunkType = BaseThunkType<ActionsTypes | FormAction>

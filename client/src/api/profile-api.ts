@@ -1,32 +1,36 @@
 import {instance} from "./config";
-import {ProfileType} from "../types/redux/ProfileTypes";
-import {IProfileResponse, IProfileStatusResponse, IProfilePhotoResponse} from "../types/ApiTypes";
+import {ProfilePhotosType, ProfileType} from "../types/redux/ProfileTypes";
+import {TResponse} from "../types/ApiTypes";
+
+interface IStatusResponse {
+    status: string
+}
 
 const getProfile = (userId: string) => {
-    return instance.get<IProfileResponse>(`profile/${userId}`)
+    return instance.get<TResponse<ProfileType>>(`profile/${userId}`)
         .then(response => response.data)
 }
 
 const updateProfile = (profile: ProfileType) => {
-    return instance.put<IProfileResponse>(`profile`, {profile})
+    return instance.put<TResponse<ProfileType>>(`profile`, {profile})
         .then(response => response.data)
 }
 
 const getUserStatus = (userId: string) => {
-    return instance.get<IProfileStatusResponse>(`profile/status/${userId}`)
+    return instance.get<TResponse<IStatusResponse>>(`profile/status/${userId}`)
         .then(response => response.data)
 }
 
 const updateUserStatus = (status: string) => {
-    return instance.put<IProfileStatusResponse>(`profile/status`, {status})
+    return instance.put<TResponse<IStatusResponse>>(`profile/status`, {status})
         .then(response => response.data)
 }
 
-const updatePhoto = (photoFile: any) => {
+const updatePhoto = (photoFile: File) => {
     const formData = new FormData()
     formData.append("image", photoFile)
 
-    return instance.put<IProfilePhotoResponse>(`profile/photo`, formData, {
+    return instance.put<TResponse<ProfilePhotosType>>(`profile/photo`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
