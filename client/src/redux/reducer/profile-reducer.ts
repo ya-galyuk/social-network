@@ -1,7 +1,7 @@
 import {v4 as uuidv4} from 'uuid';
 import profileAPI from "../../api/profile-api";
 import {FormAction, stopSubmit} from "redux-form";
-import {PostsType, ProfilePhotosType, ProfileType} from "../../types/redux/ProfileTypes";
+import {PostsType, ProfileContactsType, ProfilePhotosType, ProfileType} from "../../types/redux/ProfileTypes";
 import {ResultCodes} from "../../enums";
 import {BaseThunkType, InferActionType} from "../redux-store";
 
@@ -16,7 +16,7 @@ let initialState = {
 const profileReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
         case "PROFILE/ADD_POST" : {
-            let newPost = {id: uuidv4(), time: new Date().toISOString(), text: action.payload.postMessage,}
+            let newPost = {id: uuidv4(), time: new Date().toISOString(), ...action.payload,}
             return {...state, posts: [...state.posts, newPost],};
         }
         case "PROFILE/DELETE_POST": {
@@ -44,7 +44,7 @@ const profileReducer = (state = initialState, action: ActionsTypes): InitialStat
 }
 
 export const actions = {
-    addPost: (postMessage: string) => ({type: 'PROFILE/ADD_POST', payload: {postMessage}} as const),
+    addPost: (text: string) => ({type: 'PROFILE/ADD_POST', payload: {text}} as const),
     deletePost: (postId: string) => ({type: 'PROFILE/DELETE_POST', payload: {postId}} as const),
     setUserProfile: (profile: ProfileType) => ({
         type: 'PROFILE/SET_USER_PROFILE',
@@ -71,7 +71,7 @@ export const getUserStatus = (userId: string): ThunkType => async (dispatch) => 
     }
 }
 
-export const updateUserProfile = (status: string): ThunkType => async (dispatch) => {
+export const updateProfileStatus = (status: string): ThunkType => async (dispatch) => {
     const res = await profileAPI.updateUserStatus(status)
     if (res.resultCode === ResultCodes.Success) {
         dispatch(actions.setUserStatus(res.data.status))
@@ -85,15 +85,14 @@ export const updatePhoto = (file: File): ThunkType => async (dispatch) => {
     }
 }
 
-export const saveProfileAbout = (profile: ProfileType): ThunkType => async (dispatch, getState) => {
-    // const userId = getState().auth.userId
-    // if (!userId){
-    //     throw new Error("userId can't be null")
-    // }
-    const res = await profileAPI.updateProfile(profile)
+export const saveProfileAbout = (about: string): ThunkType => async (dispatch, getState) => {
+    const userId = getState().auth.userId
+    if (!userId){
+        throw new Error("userId can't be null")
+    }
+    const res = await profileAPI.updateProfileAbout(about)
     if (res.resultCode === ResultCodes.Success) {
-        dispatch(actions.setUserProfile({...res.data}))
-        // return dispatch(getUserProfile(userId))
+        await dispatch(getUserProfile(userId))
     }
     if (res.resultCode === ResultCodes.Error) {
         let messages = res.messages.length ? res.messages[0] : "Common error"
@@ -104,15 +103,14 @@ export const saveProfileAbout = (profile: ProfileType): ThunkType => async (disp
     }
 }
 
-export const saveProfileContacts = (profile: ProfileType): ThunkType => async (dispatch, getState) => {
-    // const userId = getState().auth.userId
-    // if (!userId){
-    //     throw new Error("userId can't be null")
-    // }
-    const res = await profileAPI.updateProfile(profile)
+export const saveProfileContacts = (contacts: ProfileContactsType): ThunkType => async (dispatch, getState) => {
+    const userId = getState().auth.userId
+    if (!userId){
+        throw new Error("userId can't be null")
+    }
+    const res = await profileAPI.updateProfileContacts(contacts)
     if (res.resultCode === ResultCodes.Success) {
-        dispatch(actions.setUserProfile({...res.data}))
-        // dispatch(getUserProfile(userId))
+        await dispatch(getUserProfile(userId))
     }
     if (res.resultCode === ResultCodes.Error) {
         let errors = res.messages.length ? res.messages[0] : "Common error"
@@ -125,6 +123,6 @@ export const saveProfileContacts = (profile: ProfileType): ThunkType => async (d
 
 export default profileReducer
 
-type InitialStateType = typeof initialState
+export type InitialStateType = typeof initialState
 type ActionsTypes = InferActionType<typeof actions>
 type ThunkType = BaseThunkType<ActionsTypes | FormAction>

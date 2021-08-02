@@ -4,17 +4,6 @@ import Pagination from "../common/Pagination/Pagination";
 import User from "./User";
 import {UserType} from "../../types/redux/UsersTypes";
 
-type PropsType = {
-    users: Array<UserType>
-    currentPage: number
-    totalCount: number
-    pageSize: number
-    followingInProgress: Array<string>
-    follow: (userId: string) => void
-    unfollow: (userId: string) => void
-    onPageClick: (pageNumber: number) => void
-}
-
 const Users: FC<PropsType> = (props) => {
     const {
         users, followingInProgress, follow, unfollow,
@@ -36,3 +25,14 @@ const Users: FC<PropsType> = (props) => {
 };
 
 export default Users;
+
+type PropsType = {
+    users: Array<UserType>
+    currentPage: number
+    totalCount: number
+    pageSize: number
+    followingInProgress: Array<string>
+    follow: (userId: string) => void
+    unfollow: (userId: string) => void
+    onPageClick: (pageNumber: number) => void
+}

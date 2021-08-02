@@ -111,6 +111,24 @@ app.put('/api/profile/status', (req, res) => {
     })
 })
 
+app.put('/api/profile/about', (req, res) => {
+    const {about} = req.body
+    return res.status(200).send({
+        messages: [],
+        resultCode: 0,
+        data: {}
+    })
+})
+
+app.put('/api/profile/contacts', (req, res) => {
+    const {contacts} = req.body
+    return res.status(200).send({
+        messages: [],
+        resultCode: 0,
+        data: {}
+    })
+})
+
 app.put('/api/profile/photo', (req, res, next) => {
     upload(req, res, function (err) {
         if (err instanceof multer.MulterError) {

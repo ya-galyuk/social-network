@@ -1,5 +1,5 @@
 import {instance} from "./config";
-import {ProfilePhotosType, ProfileType} from "../types/redux/ProfileTypes";
+import {ProfileContactsType, ProfilePhotosType, ProfileType} from "../types/redux/ProfileTypes";
 import {TResponse} from "../types/ApiTypes";
 
 interface IStatusResponse {
@@ -21,14 +21,16 @@ const getUserStatus = (userId: string) => {
         .then(response => response.data)
 }
 
-const updateUserStatus = (status: string) => {
+const updateUserStatus = (status: string | null) => {
     return instance.put<TResponse<IStatusResponse>>(`profile/status`, {status})
         .then(response => response.data)
 }
 
-const updatePhoto = (photoFile: File) => {
-    const formData = new FormData()
-    formData.append("image", photoFile)
+const updatePhoto = (photoFile: File | null) => {
+    let formData = new FormData()
+    photoFile
+        ? formData.append("image", photoFile)
+        : formData.append("image", '')
 
     return instance.put<TResponse<ProfilePhotosType>>(`profile/photo`, formData, {
         headers: {
@@ -38,13 +40,24 @@ const updatePhoto = (photoFile: File) => {
         .then(response => response.data)
 }
 
+const updateProfileAbout = (about: string | null) => {
+    return instance.put<TResponse<ProfileType>>(`profile/about`, {about})
+        .then(response => response.data)
+}
+
+const updateProfileContacts = (contacts: ProfileContactsType) => {
+    return instance.put<TResponse<ProfileType>>(`profile/contacts`, {contacts})
+        .then(response => response.data)
+}
 
 const exports = {
     getProfile,
     getUserStatus,
     updateUserStatus,
     updatePhoto,
-    updateProfile
+    updateProfile,
+    updateProfileAbout,
+    updateProfileContacts
 };
 
 export default exports;

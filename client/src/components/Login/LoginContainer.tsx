@@ -6,25 +6,10 @@ import {Redirect} from "react-router";
 import {getIsAuth} from "../../redux/selectors/auth-selectors";
 import {AppStateType} from "../../redux/redux-store";
 
-type PropsType = {
-    isAuth: boolean;
-    login: (email: string, password: string, rememberMe: boolean) => Promise<void>;
-}
-
-type MapStatePropsType = {
-    isAuth: boolean;
-}
-
-export type LoginFormValuesType = {
-    email: string;
-    password: string;
-    rememberMe: boolean;
-}
-
 const LoginContainer: FC<PropsType> = (props) => {
     const {isAuth, login} = props
 
-    const onSubmit = (formData: LoginFormValuesType): void => {
+    const onSubmit = (formData: TLoginFormData): void => {
         login(formData.email, formData.password, formData.rememberMe)
     }
 
@@ -46,3 +31,19 @@ const mapStateToProps = (state: AppStateType): MapStatePropsType => ({
 
 
 export default connect(mapStateToProps, {login})(LoginContainer);
+
+
+type PropsType = {
+    isAuth: boolean;
+    login: (email: string, password: string, rememberMe: boolean) => Promise<void>;
+}
+
+type MapStatePropsType = {
+    isAuth: boolean;
+}
+
+export type TLoginFormData = {
+    email: string;
+    password: string;
+    rememberMe: boolean;
+}

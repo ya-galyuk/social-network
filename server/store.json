@@ -421,11 +421,11 @@
       "about": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias deleniti ducimus eligendi necessitatibus nemo perferendis quisquam, reprehenderit similique unde voluptatem!",
       "contacts": {
         "Email": "email@email.com",
-        "Telegram": "https://t.me/username",
+        "Telegram": null,
         "GitHub": "https://github.com/username",
-        "YouTube": "https://www.youtube.com/username",
+        "YouTube": null,
         "LinkedIn": "https://www.linkedin.com/in/username/",
-        "WebSite": "https://website.com"
+        "WebSite": null
       },
       "educations": [
         {
