@@ -16,7 +16,9 @@ const ProfileStatus:FC<PropsType> = (props) => {
 
     const deactivateEditMode = () => {
         setEditMode(false)
-        updateProfileStatus(statusValue)
+        if (updateProfileStatus) {
+            updateProfileStatus(statusValue)
+        }
     }
 
     const onStatusChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -36,5 +38,5 @@ export default ProfileStatus;
 
 type PropsType = {
     status: string
-    updateProfileStatus: (status: string) => void
+    updateProfileStatus?: (status: string) => void
 }

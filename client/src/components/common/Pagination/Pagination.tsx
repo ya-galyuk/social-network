@@ -25,7 +25,7 @@ const Pagination: FC<PropsType> = (props) => {
 
             {filteredPage.map(page =>
                 <span key={page} className={currentPage === page ? cls.page_selected : undefined}
-                      onClick={(e) => onPageClick(page)}>{page}</span>
+                      onClick={(e) => onPageClick?.(page)}>{page}</span>
             )}
 
             {portionCount > portionNumber &&
@@ -39,9 +39,9 @@ const Pagination: FC<PropsType> = (props) => {
 export default Pagination;
 
 type PropsType = {
-    currentPage: number
+    currentPage?: number
     totalCount: number
     pageSize: number
-    onPageClick: (page: number) => void
+    onPageClick?: (page: number) => void
     portionSize?: number
 }

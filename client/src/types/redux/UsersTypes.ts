@@ -1,15 +1,15 @@
 import {ProfilePhotosType} from "./ProfileTypes";
 
 type UsersLocationType = {
-    country: string,
-    city: string
+    country: string | null,
+    city: string | null
 }
 
 export type UserType = {
     id: string,
     fullName: string,
-    about: string,
-    status: string,
+    about: string | null,
+    status: string | null,
     location: UsersLocationType,
     photos: ProfilePhotosType,
     followed: boolean
