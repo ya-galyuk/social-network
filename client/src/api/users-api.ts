@@ -2,13 +2,13 @@ import {instance} from "./config";
 import {TResponse} from "../types/ApiTypes";
 import {UserType} from "../types/redux/UsersTypes";
 
-interface IUsersResponse{
+interface IUsersResponse {
     items: Array<UserType>,
     totalCount: number
 }
 
-const getUsers = (page = 1, pageSize = 10) => {
-    return instance.get<TResponse<IUsersResponse>>(`users?page=${page}&count=${pageSize}`)
+const getUsers = (page = 1, pageSize = 10, query = '', followed: null | boolean = null) => {
+    return instance.get<TResponse<IUsersResponse>>(`users?page=${page}&count=${pageSize}&query=${query}` + (followed !== null ? `&followed=${followed}` : ''))
         .then(response => response.data)
 }
 

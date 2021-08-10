@@ -38,6 +38,11 @@ const storageConfig = multer.diskStorage({
 
 const upload = multer({storage: storageConfig}).single("image");
 
+/**
+ * TODO: update route for search
+ * @query {string} query - text for search
+ * @query {boolean} [followed] - followed users
+ */
 // auth only
 app.get('/api/users', (req, res) => {
     const {page, count} = req.query

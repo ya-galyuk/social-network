@@ -3,15 +3,18 @@ import cls from './Users.module.css'
 import Pagination from "../common/Pagination/Pagination";
 import User from "./User";
 import {UserType} from "../../types/redux/UsersTypes";
+import SearchForm from "./Search/SearchForm";
+import {TFilter} from "../../redux/reducer/users-reducer";
 
 const Users: FC<PropsType> = (props) => {
     const {
         users, followingInProgress, follow, unfollow,
-        currentPage, totalCount, pageSize, onPageClick
+        currentPage, totalCount, pageSize, onPageClick, onFilterChanged
     } = props
 
     return (
         <>
+            <SearchForm onFilterChanged={onFilterChanged}/>
             <div className={cls.user__list}>
                 {users.map(user =>
                     <User key={user.id} user={user} followingInProgress={followingInProgress} follow={follow}
@@ -35,4 +38,5 @@ type PropsType = {
     follow: (userId: string) => void
     unfollow: (userId: string) => void
     onPageClick: (pageNumber: number) => void
+    onFilterChanged: (filter: TFilter) => void
 }
