@@ -1,9 +1,13 @@
 import React, {FC} from 'react';
-import {Formik, Form, Field, ErrorMessage} from 'formik';
+import {Formik, Form, Field} from 'formik';
 import {TFilter} from "../../../redux/reducer/users-reducer";
+import {useSelector} from "react-redux";
+import {getFilter} from "../../../redux/selectors/users-selectors";
 
 const SearchForm: FC<PropsType> = React.memo((props) => {
     const {onFilterChanged} = props
+
+    const filter = useSelector(getFilter)
 
     const validateForm = (values: TFilter) => {
         const errors = {};
@@ -17,7 +21,8 @@ const SearchForm: FC<PropsType> = React.memo((props) => {
 
     return (
         <Formik
-            initialValues={{query: '', followed: null}}
+            enableReinitialize
+            initialValues={{query: filter.query, followed: filter.followed}}
             validate={validateForm}
             onSubmit={onSubmit}
         >

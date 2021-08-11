@@ -13,8 +13,8 @@ import {AppStateType} from "./redux/redux-store";
 
 const ProfileContainer = lazy(() => import('./components/Profile/ProfileContainer'));
 const MessagesContainer = lazy(() => import('./components/Messages/MessagesContainer'));
-const UsersContainer = lazy(() => import('./components/Users/UsersContainer'));
-const LoginPage = lazy(() => import('./components/Login/LoginContainer'));
+const UsersContainer = lazy(() => import('./components/Users/UsersPage'));
+const LoginPage = lazy(() => import('./components/Login/LoginPage'));
 
 class App extends Component<PropsType> {
     componentDidMount() {

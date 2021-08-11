@@ -23,9 +23,11 @@ const usersReducer = (state = initialState, action: ActionsTypes): InitialStateT
         case "USERS/SET_USERS":
         case "USERS/SET_CURRENT_PAGE":
         case "USERS/SET_TOTAL_COUNT":
-        case "USERS/SET_FILTER":
         case "USERS/TOGGLE_IS_LOADING": {
             return {...state, ...action.payload};
+        }
+        case "USERS/SET_FILTER": {
+            return {...state, filter: action.payload}
         }
         case "USERS/FOLLOW" : {
             return {

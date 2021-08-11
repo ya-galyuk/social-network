@@ -3,7 +3,7 @@ import cls from './Login.module.css'
 import {InjectedFormProps, reduxForm} from "redux-form";
 import {maxLength15, required} from "../../utils/validators";
 import {createField, Input} from "../common/FormsControls/FormControls";
-import {TLoginFormData} from "./LoginContainer";
+import {TLoginFormData} from "./LoginPage";
 
 let LoginForm: FC<InjectedFormProps<TLoginFormData>> = (props) => {
     const {handleSubmit, error} = props
