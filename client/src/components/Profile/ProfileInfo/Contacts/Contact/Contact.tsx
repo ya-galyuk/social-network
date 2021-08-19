@@ -1,17 +1,36 @@
 import React, {FC} from 'react';
 import cls from "../Contacts.module.css";
+import {
+    GithubOutlined,
+    MailOutlined,
+    YoutubeOutlined,
+    LinkedinOutlined,
+    SendOutlined,
+    GlobalOutlined
+} from '@ant-design/icons';
+import {Typography} from "antd";
 
-const Contact: FC<PropsType> = (props) => {
+const {Link} = Typography;
+
+export const ContactIcon: { [key: string]: JSX.Element } = {
+    github: <GithubOutlined/>,
+    youtube: <YoutubeOutlined/>,
+    linkedin: <LinkedinOutlined/>,
+    website: <GlobalOutlined/>,
+    telegram: <SendOutlined/>,
+    email: <MailOutlined/>
+}
+
+export const Contact: FC<PropsType> = (props) => {
     const {itemTitle, value} = props
     return (
-        <p className={cls.contacts__item}>
+        <div className={cls.contacts__item}>
+            <span>{ContactIcon[itemTitle.toLowerCase()]}</span>
             <span>{itemTitle}: </span>
-            <a href={itemTitle.toLowerCase() === 'email' ? `mailto:${value}` : value}>{value}</a>
-        </p>
+            <Link href={itemTitle.toLowerCase() === 'email' ? `mailto:${value}` : value} target="_blank">{value}</Link>
+        </div>
     );
 };
-
-export default Contact;
 
 type PropsType = {
     itemTitle: string

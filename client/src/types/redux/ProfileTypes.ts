@@ -1,7 +1,14 @@
 export type PostsType = {
-    id: string,
-    time: string,
-    text: string
+    id: string
+    href?: string
+    author: string
+    avatar: string | null
+    content: string
+    datetime: string
+    action: {
+        like: number
+        comment: number
+    }
 }
 
 export type ProfilePhotosType = {
@@ -9,7 +16,7 @@ export type ProfilePhotosType = {
     large: string | null
 }
 
-export type ProfileContactsType = {
+export interface IProfileContacts {
     Email: string | null,
     Telegram: string | null,
     GitHub: string | null,
@@ -38,13 +45,18 @@ export type ProfileJobType = {
     description: string
 }
 
+export type ProfileDetails = {
+    fullName: string
+    status: string
+}
+
 export type ProfileType = {
     userId: string,
     fullName: string,
     status: string | null,
     photos: ProfilePhotosType,
     about: string | null
-    contacts: ProfileContactsType,
+    contacts: IProfileContacts,
     educations: Array<ProfileEducationsType>,
     job: ProfileJobType
 }

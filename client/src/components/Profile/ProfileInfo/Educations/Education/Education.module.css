@@ -1,19 +1,19 @@
 .educations__item {
-    margin-bottom: 20px;
+    /*margin-bottom: 20px;*/
     display: flex;
 }
 
-.educations__item:hover {
-    background: rgba(0, 0, 0, .05);
-}
+/*.educations__item:hover {*/
+/*    background: rgba(0, 0, 0, .05);*/
+/*}*/
 
 .educations__item:last-child {
-    margin: 0;
+    padding: 0;
 }
 
 .educations__logo {
-    width: 70px;
-    height: 70px;
+    width: 50px;
+    height: 50px;
 }
 
 .educations__img {
@@ -23,8 +23,8 @@
 }
 
 .educations__info {
-    margin-left: 20px;
-    line-height: 1.5;
+    /*margin-left: 20px;*/
+    /*line-height: 1.5;*/
 }
 
 .educations__university {

@@ -1,34 +1,32 @@
 import React, {FC, useState} from 'react';
-import ContactsForm from "./ContactsForm";
-import Contacts from "./Contacts";
-import {ProfileContactsType, ProfileType} from "../../../../types/redux/ProfileTypes";
+import {ContactsForm} from "./ContactsForm";
+import {Contacts} from "./Contacts";
+import cls from "../../Profile.module.css";
+import {useSelector} from "react-redux";
+import {getContacts} from "../../../../redux/selectors/profile-selectors";
+import Title from "../../common/Title";
 
-const ContactsContainer: FC<PropsType> = (props) => {
-    const {profile, isOwner, saveProfileContacts} = props
-    const initialFormValues = {...profile.contacts}
+export const ContactsContainer: FC<PropsType> = (props) => {
+    const {isOwner} = props
 
-    const [editMode, setEditMode] = useState<boolean>(false)
+    const contacts = useSelector(getContacts)
 
-    const onSubmit = (formData: TContactsFormData) => {
-        saveProfileContacts({...formData}).then(() => {
-            setEditMode(false)
-        })
-    }
+    const [editMode, setEditMode] = useState(false)
 
-    return (<>
-        {editMode
-            ? <ContactsForm initialValues={initialFormValues} contacts={profile.contacts} onSubmit={onSubmit}/>
-            : <Contacts contacts={profile.contacts} isOwner={isOwner} setEditMode={setEditMode}/>
-        }
-    </>);
+    if (!contacts) return null
+
+    return (
+        <div className={cls.contacts}>
+            <Title title={"Contact Info"} isOwner={isOwner} editMode={editMode} setEditMode={setEditMode}/>
+
+            {editMode
+                ? <ContactsForm contacts={contacts} setEditMode={setEditMode}/>
+                : <Contacts contacts={contacts}/>
+            }
+        </div>
+    )
 };
 
-export default ContactsContainer;
-
 type PropsType = {
-    profile: ProfileType
     isOwner: boolean
-    saveProfileContacts: (contacts: ProfileContactsType) => Promise<void>
 }
-
-export type TContactsFormData = ProfileContactsType

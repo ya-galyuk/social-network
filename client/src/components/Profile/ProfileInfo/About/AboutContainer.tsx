@@ -1,38 +1,52 @@
 import React, {FC, useState} from 'react';
-import AboutForm from "./AboutForm";
-import About from "./About";
-import {ProfileType} from "../../../../types/redux/ProfileTypes";
+import {Typography} from "antd";
+import {useDispatch, useSelector} from "react-redux";
+import {saveProfileAbout} from "../../../../redux/reducer/profile-reducer";
+import clsProfile from "../../Profile.module.css";
+import {getAbout} from "../../../../redux/selectors/profile-selectors";
+import Title from "../../common/Title";
 
-const AboutContainer: FC<PropsType> = (props) => {
-    const {profile, isOwner, saveProfileAbout} = props
-    const initialFormValues = {about: profile.about}
+const {Paragraph} = Typography;
 
+export const AboutContainer: FC<PropsType> = React.memo((props) => {
+    const {isOwner} = props
+
+    const about = useSelector(getAbout)
+
+    const [aboutStr, setAboutStr] = useState(about)
     const [editMode, setEditMode] = useState(false)
 
-    const onSubmit = (formData: TAboutFormData) => {
-        saveProfileAbout(formData.about)
+    const dispatch = useDispatch()
+
+    const onChange = (value: string) => {
+        if (aboutStr !== value) {
+            dispatch(saveProfileAbout(value))
+            setAboutStr(value)
+        }
         setEditMode(false)
     }
 
-    return (
-        <>
-            {editMode
-                ? <AboutForm initialValues={initialFormValues} onSubmit={onSubmit}/>
-                : <About isOwner={isOwner} about={profile.about} setEditMode={setEditMode}/>
-            }
-        </>
-    );
-}
-;
+    if (!about) return null
 
-export default AboutContainer;
+    return (
+        <div className={clsProfile.about}>
+            <Title title={"About"} isOwner={isOwner} editMode={editMode} setEditMode={setEditMode}/>
+
+            <Paragraph
+                editable={isOwner && {
+                    icon: <></>,
+                    editing: editMode,
+                    onChange,
+                    onEnd: () => setEditMode(false),
+                    onCancel: () => setEditMode(false)
+                }}
+            >
+                {aboutStr}
+            </Paragraph>
+        </div>
+    );
+})
 
 type PropsType = {
-    profile: ProfileType
     isOwner: boolean
-    saveProfileAbout: (about: string | null) => void
-}
-
-export type TAboutFormData = {
-    about: string | null
 }

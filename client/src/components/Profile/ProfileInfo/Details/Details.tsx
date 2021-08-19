@@ -1,31 +1,44 @@
 import React, {FC} from 'react';
+import {useSelector} from "react-redux";
+import {getFullName, getStatus} from "../../../../redux/selectors/profile-selectors";
+import {Button, Col, Divider, Row, Typography} from "antd";
+import {AvatarContainer} from "../Avatar/AvatarContainer";
 import cls from "./Details.module.css";
-import ProfileStatus from "../Status/ProfileStatus";
-import {ProfileJobType} from "../../../../types/redux/ProfileTypes";
 
-const Details: FC<PropsType> = (props) => {
-    const {fullName, status, job, updateProfileStatus} = props
+const {Paragraph} = Typography;
+
+export const Details: FC<PropsType> = (props) => {
+    const {inputRef, editMode, setEditMode} = props
+
+    const fullName = useSelector(getFullName)
+    const status = useSelector(getStatus)
+
+    const onClickEdit = async () => {
+        await setEditMode(true)
+        inputRef.current!?.focus({cursor: 'end'})
+    }
 
     return (
         <div className={cls.details}>
-            <div className={cls.details__fullname}>{fullName}</div>
-            {job.lookingForAJob
-                ? <>
-                    <p>Looking for a job</p>
-                    <p className={cls.details__description}>{job.description}</p>
-                </>
-                : undefined
-            }
-            <ProfileStatus status={status} updateProfileStatus={updateProfileStatus}/>
+            <Divider orientation="right" className={cls.details__hr}>
+                {!editMode
+                && <Button type={"text"} onClick={onClickEdit} className={cls.details__btn}>edit</Button>}
+            </Divider>
+            <Row>
+                <Col span={6}>
+                    <AvatarContainer editMode={editMode}/>
+                </Col>
+                <Col span={18}>
+                    <Paragraph className={cls.fullName__paragraph}>{fullName}</Paragraph>
+                    <Paragraph className={cls.status__paragraph}>{status}</Paragraph>
+                </Col>
+            </Row>
         </div>
     );
-};
-
-export default Details;
+}
 
 type PropsType = {
-    fullName: string
-    status: string
-    job: ProfileJobType
-    updateProfileStatus: (status: string) => void
+    editMode: boolean
+    inputRef: React.MutableRefObject<any>
+    setEditMode: (editMode: boolean) => void
 }

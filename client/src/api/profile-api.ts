@@ -1,5 +1,5 @@
 import {instance} from "./config";
-import {ProfileContactsType, ProfilePhotosType, ProfileType} from "../types/redux/ProfileTypes";
+import {IProfileContacts, ProfileDetails, ProfilePhotosType, ProfileType} from "../types/redux/ProfileTypes";
 import {TResponse} from "../types/ApiTypes";
 
 interface IStatusResponse {
@@ -45,8 +45,13 @@ const updateProfileAbout = (about: string | null) => {
         .then(response => response.data)
 }
 
-const updateProfileContacts = (contacts: ProfileContactsType) => {
+const updateProfileContacts = (contacts: IProfileContacts) => {
     return instance.put<TResponse<ProfileType>>(`profile/contacts`, {contacts})
+        .then(response => response.data)
+}
+
+const updateProfileDetails = (details: ProfileDetails) => {
+    return instance.put<TResponse<ProfileType>>(`profile/details`, {details})
         .then(response => response.data)
 }
 
@@ -57,7 +62,8 @@ const exports = {
     updatePhoto,
     updateProfile,
     updateProfileAbout,
-    updateProfileContacts
+    updateProfileContacts,
+    updateProfileDetails
 };
 
 export default exports;

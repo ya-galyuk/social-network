@@ -12,3 +12,20 @@
     object-fit: cover;
     border-radius: 5px;
 }
+
+.edit__btn {
+    font-size: 18px;
+    padding: 7px;
+    color: var(--primary);
+}
+
+.upload {
+    position: absolute;
+    top: 0;
+    width: 150px;
+    height: 150px;
+    opacity: .7;
+}
+.upload:hover{
+    opacity: 1;
+}

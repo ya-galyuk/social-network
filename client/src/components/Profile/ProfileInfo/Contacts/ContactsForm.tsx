@@ -1,37 +1,70 @@
 import React, {FC} from 'react';
 import cls from "./Contacts.module.css";
-import clsProfile from "../ProfileInfo.module.css";
-import {InjectedFormProps, reduxForm} from "redux-form";
-import {createField, Input} from "../../../common/FormsControls/FormControls";
-import {v4 as uuidv4} from "uuid";
-import {TContactsFormData} from "./ContactsContainer";
-import {ProfileContactsType} from "../../../../types/redux/ProfileTypes";
+import {IProfileContacts} from "../../../../types/redux/ProfileTypes";
+import {useDispatch} from "react-redux";
+import {Formik, FormikHelpers} from "formik";
+import {saveProfileContacts} from "../../../../redux/reducer/profile-reducer";
+import {Form, Input, SubmitButton} from "formik-antd";
+import {Button} from "antd";
 
-let ContactsForm: FC<InjectedFormProps<TContactsFormData, OwnPropsType> & OwnPropsType> = (props) => {
-    const {handleSubmit, contacts, submitting} = props
+export const ContactsForm: FC<PropsType> = (props) => {
+    const {contacts, setEditMode} = props
+
+    const dispatch = useDispatch()
+
+    const onSubmit = (formData: IValues, {setSubmitting}: FormikHelpers<IValues>) => {
+        dispatch(saveProfileContacts({...formData}))
+        setSubmitting(false)
+    }
+
+    const onCancel = () => {
+        setEditMode(false)
+    }
 
     const contactElements = Object.keys(contacts).map(key =>
-        <div className={cls.contacts__item} key={uuidv4()}>
-            <span>{key}: </span>
-            {createField<TContactsFormKeys>(key as keyof ProfileContactsType, "text", Input, [], key)}
-        </div>)
+        <Form.Item name={key} label={key} key={key}>
+            <Input name={key} placeholder={key}/>
+        </Form.Item>)
 
     return (
-        <form className={clsProfile.contacts} onSubmit={handleSubmit}>
-            <h3 className={clsProfile.contacts__title}>Contact Info</h3>
-            {contactElements}
-            <button className={clsProfile.btn__save} type="submit" disabled={submitting}>save</button>
-        </form>
-    );
+        <Formik
+            enableReinitialize
+            initialValues={{
+                Email: contacts.Email,
+                Telegram: contacts.Telegram,
+                GitHub: contacts.GitHub,
+                YouTube: contacts.YouTube,
+                LinkedIn: contacts.LinkedIn,
+                WebSite: contacts.WebSite
+            }}
+            onSubmit={onSubmit}
+        >
+            {({isSubmitting}) => (
+                <Form {...layout}>
+                    {contactElements}
+                    <Form.Item name={"submitOrCancel"} {...tailLayout}>
+                        <SubmitButton type={"primary"} disabled={isSubmitting}>Save</SubmitButton>
+                        <Button className={cls.form__btnCancel} onClick={onCancel}>Cancel</Button>
+                    </Form.Item>
+                </Form>
+            )}
+        </Formik>
+    )
 };
 
-export default reduxForm<TContactsFormData, OwnPropsType>({
-    form: "edit-profile-contacts",
-    destroyOnUnmount: false,
-})(ContactsForm);
-
-type OwnPropsType = {
-    contacts: ProfileContactsType
+type PropsType = {
+    contacts: IProfileContacts
+    setEditMode: (editMode: boolean) => void
 }
 
-export type TContactsFormKeys = Extract<keyof TContactsFormData, string>
+interface IValues extends IProfileContacts {
+}
+
+const layout = {
+    labelCol: {span: 3},
+    wrapperCol: {span: 21},
+}
+
+const tailLayout = {
+    wrapperCol: {offset: 3, span: 21},
+}

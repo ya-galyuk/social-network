@@ -1,0 +1,10 @@
+.menu{
+    border-bottom-color: var(--light) !important;
+}
+.menu li:not(:last-child) {
+    opacity: initial !important;
+    height: initial !important;
+    overflow-y: initial !important;
+    pointer-events: auto !important;
+    position: relative !important;
+}

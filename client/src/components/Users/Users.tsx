@@ -1,7 +1,6 @@
 import React, {FC, useEffect} from 'react';
 import cls from './Users.module.css'
-import Pagination from "../common/Pagination/Pagination";
-import User from "./User";
+import {User} from "./User";
 import SearchForm from "./Search/SearchForm";
 import {follow, requestUsers, TFilter, unfollow} from "../../redux/reducer/users-reducer";
 import {useDispatch, useSelector} from "react-redux";
@@ -15,6 +14,7 @@ import {
 } from "../../redux/selectors/users-selectors";
 import {useHistory} from "react-router";
 import queryString from "query-string";
+import {Pagination, Row} from 'antd';
 
 export const Users: FC<PropsType> = (props) => {
     const users = useSelector(getUsers)
@@ -69,19 +69,18 @@ export const Users: FC<PropsType> = (props) => {
         dispatch(unfollow(userId))
     }
 
-    return (
-        <>
-            <SearchForm onFilterChanged={onFilterChanged}/>
-            <div className={cls.user__list}>
-                {users.map(user =>
-                    <User key={user.id} user={user} followingInProgress={followingInProgress} follow={onFollow}
-                          unfollow={onUnfollow}/>
-                )}
-            </div>
-            <Pagination currentPage={currentPage} totalCount={totalCount} pageSize={pageSize}
-                        onPageClick={onPageChanged}/>
-        </>
-    );
+    return <>
+        <SearchForm onFilterChanged={onFilterChanged}/>
+        <div className={cls.user__list}>
+            {users.map(user =>
+                <User key={user.id} user={user} followingInProgress={followingInProgress} follow={onFollow}
+                      unfollow={onUnfollow}/>
+            )}
+        </div>
+        <Row justify="center">
+            <Pagination onChange={onPageChanged} total={totalCount} defaultCurrent={currentPage} pageSize={pageSize}/>
+        </Row>
+    </>
 };
 
 type PropsType = {}

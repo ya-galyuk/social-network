@@ -134,6 +134,19 @@ app.put('/api/profile/contacts', (req, res) => {
     })
 })
 
+/**
+ * TODO: update route for details profile
+ * @body {fullName: string, status: string} details
+ */
+app.put('/api/profile/details', (req, res) => {
+    const {details} = req.body
+    return res.status(200).send({
+        messages: [],
+        resultCode: 0,
+        data: {}
+    })
+})
+
 app.put('/api/profile/photo', (req, res, next) => {
     upload(req, res, function (err) {
         if (err instanceof multer.MulterError) {
@@ -143,7 +156,7 @@ app.put('/api/profile/photo', (req, res, next) => {
             console.log("Error", err)
             return res.status(500)
         }
-        const filePath = ` http://localhost:${PORT}/` + req.file.path
+        const filePath = ` http://localhost:${PORT}/` + req.file?.path
         return res.status(200).send({
             data: {
                 small: filePath, large: ''
@@ -159,8 +172,8 @@ app.post('/api/auth/me', (req, res) => {
 })
 
 app.post('/api/auth/login', (req, res) => {
-    const {email, password, rememberMe} = req.body
-    if (email !== "admin") {
+    const {email, password, remember} = req.body
+    if (email !== "admin@admin.com") {
         return res.send({...store.auth.login, messages: ["Incorrect email or password"], resultCode: 1})
     }
     return res.status(200).send({...store.auth.login})

@@ -1,14 +1,37 @@
 import {v4 as uuidv4} from 'uuid';
 import profileAPI from "../../api/profile-api";
 import {FormAction, stopSubmit} from "redux-form";
-import {PostsType, ProfileContactsType, ProfilePhotosType, ProfileType} from "../../types/redux/ProfileTypes";
+import {
+    IProfileContacts,
+    PostsType,
+    ProfileDetails,
+    ProfilePhotosType,
+    ProfileType
+} from "../../types/redux/ProfileTypes";
 import {ResultCodes} from "../../enums";
 import {BaseThunkType, InferActionType} from "../redux-store";
+import moment from "moment";
 
 let initialState = {
     posts: [
-        {id: '1', time: 'time-1', text: 'post text 1',},
-        {id: '2', time: 'time-2', text: 'Post text 2',},
+        {
+            id: '1',
+            href: 'https://ant.design',
+            author: 'Han Solo 1',
+            avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+            content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
+            datetime: moment().fromNow(),
+            action: {like: 128, comment: 0,}
+        },
+        {
+            id: '2',
+            href: 'https://ant.design',
+            author: 'Han Solo 2',
+            avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+            content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
+            datetime: moment().fromNow(),
+            action: {like: 2, comment: 0,}
+        },
     ] as Array<PostsType>,
     profile: null as (ProfileType | null)
 }
@@ -16,7 +39,14 @@ let initialState = {
 const profileReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
         case "PROFILE/ADD_POST" : {
-            let newPost = {id: uuidv4(), time: new Date().toISOString(), ...action.payload,}
+            let newPost = {
+                id: uuidv4(),
+                author: 'Han Solo Han Solo',
+                avatar: null,
+                datetime: moment().fromNow(),
+                action: {like: 0, comment: 0},
+                ...action.payload,
+            }
             return {...state, posts: [...state.posts, newPost],};
         }
         case "PROFILE/DELETE_POST": {
@@ -44,7 +74,7 @@ const profileReducer = (state = initialState, action: ActionsTypes): InitialStat
 }
 
 export const actions = {
-    addPost: (text: string) => ({type: 'PROFILE/ADD_POST', payload: {text}} as const),
+    addPost: (content: string) => ({type: 'PROFILE/ADD_POST', payload: {content}} as const),
     deletePost: (postId: string) => ({type: 'PROFILE/DELETE_POST', payload: {postId}} as const),
     setUserProfile: (profile: ProfileType) => ({
         type: 'PROFILE/SET_USER_PROFILE',
@@ -64,20 +94,6 @@ export const getUserProfile = (userId: string): ThunkType => async (dispatch) =>
     }
 }
 
-export const getUserStatus = (userId: string): ThunkType => async (dispatch) => {
-    const res = await profileAPI.getUserStatus(userId)
-    if (res.resultCode === ResultCodes.Success) {
-        dispatch(actions.setUserStatus(res.data.status))
-    }
-}
-
-export const updateProfileStatus = (status: string): ThunkType => async (dispatch) => {
-    const res = await profileAPI.updateUserStatus(status)
-    if (res.resultCode === ResultCodes.Success) {
-        dispatch(actions.setUserStatus(res.data.status))
-    }
-}
-
 export const updatePhoto = (file: File): ThunkType => async (dispatch) => {
     const res = await profileAPI.updatePhoto(file)
     if (res.resultCode === ResultCodes.Success) {
@@ -85,9 +101,9 @@ export const updatePhoto = (file: File): ThunkType => async (dispatch) => {
     }
 }
 
-export const saveProfileAbout = (about: string): ThunkType => async (dispatch, getState) => {
+export const saveProfileAbout = (about: string | null): ThunkType => async (dispatch, getState) => {
     const userId = getState().auth.userId
-    if (!userId){
+    if (!userId) {
         throw new Error("userId can't be null")
     }
     const res = await profileAPI.updateProfileAbout(about)
@@ -103,9 +119,9 @@ export const saveProfileAbout = (about: string): ThunkType => async (dispatch, g
     }
 }
 
-export const saveProfileContacts = (contacts: ProfileContactsType): ThunkType => async (dispatch, getState) => {
+export const saveProfileContacts = (contacts: IProfileContacts): ThunkType => async (dispatch, getState) => {
     const userId = getState().auth.userId
-    if (!userId){
+    if (!userId) {
         throw new Error("userId can't be null")
     }
     const res = await profileAPI.updateProfileContacts(contacts)
@@ -117,6 +133,20 @@ export const saveProfileContacts = (contacts: ProfileContactsType): ThunkType =>
         typeof errors === "object" ? errors = {...errors} : errors = {_error: errors}
         dispatch(stopSubmit("edit-profile-contacts", errors))
         return Promise.reject(errors)
+    }
+}
+
+export const updateProfileDetails = (details: ProfileDetails): ThunkType => async (dispatch, getState) => {
+    let userId = getState().auth.userId
+    if (!userId) {
+        throw new Error("userId can't be null")
+    }
+    const res = await profileAPI.updateProfileDetails(details)
+    if (res.resultCode === ResultCodes.Success) {
+        await dispatch(getUserProfile(userId))
+    }
+    if (res.resultCode === ResultCodes.Error) {
+        console.log(res.messages)
     }
 }
 

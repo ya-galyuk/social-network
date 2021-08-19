@@ -1,13 +1,8 @@
 import React from 'react';
-import cls from './Preloader.module.css'
-import preloader from "../../../assets/images/preloader.svg";
+import {Spin} from 'antd';
+import {LoadingOutlined} from '@ant-design/icons';
 
-const Preloader = () => {
-    return (
-        <div className={cls.preloader}>
-            <img className={cls.preloader__img} src={preloader} alt=""/>
-        </div>
-    );
+export const Preloader = () => {
+    const loadingIcon = <LoadingOutlined style={{fontSize: 48}} spin/>;
+    return (<Spin indicator={loadingIcon}/>);
 };
-
-export default Preloader;

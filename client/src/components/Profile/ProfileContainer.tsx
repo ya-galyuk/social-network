@@ -1,97 +1,68 @@
-import React from 'react';
-import Profile from "./Profile";
-import {connect} from "react-redux";
-import {
-    getUserProfile,
-    getUserStatus,
-    updateProfileStatus,
-    updatePhoto,
-    saveProfileContacts,
-    saveProfileAbout
-} from "../../redux/reducer/profile-reducer";
-import {RouteComponentProps, withRouter} from "react-router";
-import {compose} from "redux";
-import {getProfile, getStatus} from "../../redux/selectors/profile-selectors";
-import {getAuthorizedUserId, getIsAuth} from "../../redux/selectors/auth-selectors";
-import {AppStateType} from "../../redux/redux-store";
-import {ProfileContactsType, ProfileType} from "../../types/redux/ProfileTypes";
+import React, {FC, useEffect} from 'react';
+import {useDispatch, useSelector} from "react-redux";
+import {getUserProfile} from "../../redux/reducer/profile-reducer";
+import {useHistory, useParams} from "react-router";
+import {getAuthorizedUserId} from "../../redux/selectors/auth-selectors";
+import {Posts} from "./Posts/Posts";
+import cls from "./Profile.module.css";
+import {ContactsContainer} from "./ProfileInfo/Contacts/ContactsContainer";
+import {AboutContainer} from "./ProfileInfo/About/AboutContainer";
+import {Educations} from "./ProfileInfo/Educations/Educations";
+import {getProfile} from "../../redux/selectors/profile-selectors";
+import {Preloader} from "../common/Preloader/Preloader";
+import {DetailsContainer} from "./ProfileInfo/Details/DetailsContainer";
 
-class ProfileContainer extends React.Component<TProps & RouteComponentProps<TOwnProps>> {
-    refreshProfile() {
-        const {match, history, authorizedUserId, getUserProfile, getUserStatus} = this.props
-        let {userId} = match.params
+const ProfileContainer: FC<PropsType> = () => {
+    const history = useHistory()
+    let {userId} = useParams<IMatchParams>();
+    const isOwner = !userId
+
+    const authorizedUserId = useSelector(getAuthorizedUserId)
+    const profile = useSelector(getProfile)
+
+    const dispatch = useDispatch()
+
+    const refresh = () => {
         if (!userId && authorizedUserId) userId = authorizedUserId
         if (!userId) history.push("/login")
+        // if (!userId) userId = "1"
         if (userId) {
-            getUserProfile(userId)
-            getUserStatus(userId)
+            dispatch(getUserProfile(userId))
         }
     }
 
-    componentDidMount() {
-        this.refreshProfile()
-    }
+    useEffect(() => {
+        refresh()
+    }, [userId])
 
-    componentDidUpdate(prevProps: RouteComponentProps<TOwnProps>) {
-        if (this.props.match.params.userId !== prevProps.match.params.userId) {
-            this.refreshProfile()
-        }
-    }
+    if (!profile) return <Preloader/>
 
-    render() {
-        const {
-            match,
-            profile,
-            status,
-            updateProfileStatus,
-            updatePhoto,
-            saveProfileContacts,
-            saveProfileAbout,
-            ...restProps
-        } = this.props
-        return <Profile {...restProps} profile={profile} status={status} isOwner={!match.params.userId}
-                        updateProfileStatus={updateProfileStatus} updatePhoto={updatePhoto}
-                        saveProfileContacts={saveProfileContacts} saveProfileAbout={saveProfileAbout}/>
-    }
+    return (
+        <div className={cls.profile__container}>
+            <div className={cls.info}>
+                <DetailsContainer isOwner={isOwner}/>
+                <ContactsContainer isOwner={isOwner}/>
+                <AboutContainer isOwner={isOwner}/>
+                <Educations isOwner={isOwner}/>
+            </div>
+            <Posts/>
+        </div>
+    );
+};
+
+export default ProfileContainer;
+
+type PropsType = {}
+
+interface IMatchParams {
+    userId?: string;
 }
 
-let mapStateToProps = (state: AppStateType) => ({
-    profile: getProfile(state),
-    status: getStatus(state),
-    authorizedUserId: getAuthorizedUserId(state),
-    isAuth: getIsAuth(state)
-})
+/*
+TODO: - add editMode for Educations
+      - update edit mode such as details block
+      - create page for posts
+      - add job section
+      - add server error message to form
+*/
 
-export default compose<React.ComponentType>(
-    connect(mapStateToProps, {
-        getUserProfile,
-        getUserStatus,
-        updateProfileStatus,
-        updatePhoto,
-        saveProfileContacts,
-        saveProfileAbout
-    }),
-    withRouter,
-)(ProfileContainer)
-
-type TProps = TMapStateProps & TDispatchStateProps
-
-type TOwnProps = {
-    userId?: string
-}
-
-type TMapStateProps = {
-    profile: ProfileType
-    status: string
-    authorizedUserId: string | null
-    isAuth: boolean
-}
-
-type TDispatchStateProps = {
-    getUserProfile: (userId: string) => void
-    getUserStatus: (userId: string) => void
-    updateProfileStatus: (status: string) => void
-    updatePhoto: (file: File) => void
-    saveProfileContacts: (contacts: ProfileContactsType) => Promise<void>
-    saveProfileAbout: (about: string | null) => void
-}

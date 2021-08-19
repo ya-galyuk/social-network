@@ -1,33 +1,35 @@
-import React, {Component, lazy, Suspense} from "react";
-import {connect} from "react-redux";
-import {compose} from "redux";
-import {Redirect, Switch, withRouter} from "react-router";
+import React, {FC, lazy, Suspense, useEffect} from "react";
+import {useSelector} from "react-redux";
+import {Redirect, Switch} from "react-router";
 import {Route} from 'react-router-dom'
 import {actions} from "./redux/reducer/app-reducer";
-import HeaderContainer from "./components/Header/HeaderContainer";
-import Navbar from "./components/Navbar/Navbar";
-import Preloader from "./components/common/Preloader/Preloader";
+import {HeaderPage} from "./components/Header/HeaderPage";
+import {Preloader} from "./components/common/Preloader/Preloader";
 import './App.css';
 import {getAppInitialized} from "./redux/selectors/app-selectors";
-import {AppStateType} from "./redux/redux-store";
+import {Layout} from 'antd';
+
+const {Content, Footer} = Layout;
 
 const ProfileContainer = lazy(() => import('./components/Profile/ProfileContainer'));
 const MessagesContainer = lazy(() => import('./components/Messages/MessagesContainer'));
 const UsersContainer = lazy(() => import('./components/Users/UsersPage'));
 const LoginPage = lazy(() => import('./components/Login/LoginPage'));
 
-class App extends Component<PropsType> {
-    componentDidMount() {
-        this.props.setIsInitialized()
-    }
+export const App: FC<PropsType> = (props) => {
+    const initialized = useSelector(getAppInitialized)
 
-    render() {
-        if (!this.props.initialized) return <Preloader/>
-        return (
-            <div className="wrapper">
-                <HeaderContainer/>
-                <Navbar/>
-                <main className="content">
+    useEffect(() => {
+        actions.setIsInitialized()
+    }, [])
+
+    if (initialized) return <Preloader/>
+
+    return (
+        <Layout style={{minHeight: '100vh'}}>
+            <HeaderPage/>
+            <Content className={"content"}>
+                <div className={"container"}>
                     <Suspense fallback={<Preloader/>}>
                         <Switch>
                             <Route exact path='/' render={() => <Redirect to={'/profile'}/>}/>
@@ -38,29 +40,11 @@ class App extends Component<PropsType> {
                             <Route path='*' render={() => <div>404</div>}/>
                         </Switch>
                     </Suspense>
-                </main>
-            </div>
-        );
-    }
+                </div>
+            </Content>
+            <Footer style={{textAlign: 'center'}}>Social Network ©2021 Created by Yaroslav</Footer>
+        </Layout>
+    );
 }
 
-const mapStateToProps = (state: AppStateType): MapStatePropsType => ({
-    initialized: getAppInitialized(state)
-})
-
-export default compose<React.ComponentType>(
-    withRouter,
-    connect(mapStateToProps, {
-        setIsInitialized: actions.setIsInitialized
-    })
-)(App);
-
-type PropsType = MapStatePropsType & DispatchStatePropsType
-
-type MapStatePropsType = {
-    initialized: boolean;
-}
-
-type DispatchStatePropsType = {
-    setIsInitialized: () => void;
-}
+type PropsType = {}

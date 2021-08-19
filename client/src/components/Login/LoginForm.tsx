@@ -1,32 +1,76 @@
 import React, {FC} from 'react';
 import cls from './Login.module.css'
-import {InjectedFormProps, reduxForm} from "redux-form";
-import {maxLength15, required} from "../../utils/validators";
-import {createField, Input} from "../common/FormsControls/FormControls";
-import {TLoginFormData} from "./LoginPage";
+import {Checkbox, Form, Input, SubmitButton} from "formik-antd";
+import {LockOutlined, UserOutlined} from "@ant-design/icons";
+import {Formik, FormikHelpers} from "formik";
+import {login} from "../../redux/reducer/auth-reducer";
+import {useDispatch} from "react-redux";
+import * as Yup from 'yup';
 
-let LoginForm: FC<InjectedFormProps<TLoginFormData>> = (props) => {
-    const {handleSubmit, error} = props
+interface IValues {
+    email: string;
+    password: string;
+    remember: boolean;
+}
+
+export const LoginForm: FC<PropsType> = (props) => {
+    const dispatch = useDispatch()
+
+    const LoginValidationSchema = Yup.object().shape({
+        email: Yup.string()
+            .email('Invalid email')
+            .required('Required'),
+        password: Yup.string()
+            .min(2, 'Too Short!')
+            .max(50, 'Too Long!')
+            .required('Required'),
+    });
+
+    const onSubmit = (values: IValues, {setSubmitting}: FormikHelpers<IValues>) => {
+        dispatch(login(values.email, values.password, values.remember))
+        setSubmitting(false)
+    }
+
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                {createField<TLoginFormKeys>("email", "text", Input, [required, maxLength15], "Enter your login")}
-            </div>
-            <div>
-                {createField<TLoginFormKeys>("password", "password", Input, [required], "Password")}
-            </div>
-            <div>
-                {createField<TLoginFormKeys>("rememberMe", "checkbox", Input, [], undefined)}
-                <label htmlFor="rememberMe"> remember me</label>
-            </div>
-            {error && <div className={cls.error}>{error}</div>}
-            <div>
-                <button>Login</button>
-            </div>
-        </form>
+        <Formik
+            enableReinitialize
+            initialValues={{
+                email: '',
+                password: '',
+                remember: true,
+            }}
+            validationSchema={LoginValidationSchema}
+            onSubmit={onSubmit}
+        >
+            {({isSubmitting}) => (
+                <Form className={cls.login__form}>
+                    <Form.Item name="email">
+                        <Input prefix={<UserOutlined className="site-form-item-icon"/>} placeholder="Username"
+                               name={"email"}/>
+                    </Form.Item>
+                    <Form.Item name="password">
+                        <Input prefix={<LockOutlined className="site-form-item-icon"/>} type="password"
+                               placeholder="Password" name={"password"}/>
+                    </Form.Item>
+                    <Form.Item name="remember">
+                        <Form.Item name="remember" valuePropName="checked" noStyle>
+                            <Checkbox name={"remember"}>Remember me</Checkbox>
+                        </Form.Item>
+
+                        <a className={cls.login__forgot} href="">
+                            Forgot password
+                        </a>
+                    </Form.Item>
+                    <Form.Item name="submit">
+                        <SubmitButton type="primary" block htmlType="submit" disabled={isSubmitting}>
+                            Log in
+                        </SubmitButton>
+                        Or <a href="">register now!</a>
+                    </Form.Item>
+                </Form>
+            )}
+        </Formik>
     );
 };
 
-export default reduxForm<TLoginFormData>({form: 'login'})(LoginForm);
-
-export type TLoginFormKeys = Extract<keyof TLoginFormData, string>
+type PropsType = {}

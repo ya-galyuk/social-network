@@ -1,0 +1,30 @@
+.profile__container {
+    max-width: 768px;
+    margin: 0 auto;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+}
+
+.info div:last-child {
+    margin-bottom: 0;
+}
+
+.contacts,
+.about,
+.educations,
+.details,
+.job {
+    position: relative;
+    margin: 10px 0;
+}
+
+.educations__title {
+    margin-bottom: calc(0.5em + 7px);
+}
+
+.educations__item:last-child {
+    padding: 0;
+}

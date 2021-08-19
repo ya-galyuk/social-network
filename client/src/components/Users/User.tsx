@@ -1,9 +1,9 @@
 import React, {FC} from 'react';
 import cls from './Users.module.css'
-import userPhoto from '../../assets/images/user.png'
 import {NavLink} from "react-router-dom";
 import {UserType} from "../../types/redux/UsersTypes";
-
+import {Avatar, Button, Row} from "antd";
+import {UserOutlined} from '@ant-design/icons';
 
 type PropsType = {
     user: UserType,
@@ -12,33 +12,26 @@ type PropsType = {
     unfollow: (userId: string) => void
 }
 
-const User: FC<PropsType> = (props) => {
+export const User: FC<PropsType> = (props) => {
     const {user, followingInProgress, follow, unfollow} = props
+    const btnText = user.followed ? "Unfollow" : "Follow"
 
-    return (
+    const onBtnClick = () => user.followed ? unfollow(user.id) : follow(user.id)
+
+    return <>
         <div className={cls.user__item}>
-            <NavLink to={`/profile/${user.id}`} className={cls.user__link}>
-                <div className={cls.user__photo}>
-                    <img className={cls.user__img}
-                         src={user.photos.small || userPhoto}
-                         alt=""/>
-                </div>
-                <div className={cls.user__info}>
-                    <span className={cls.user__fullName}>{user.fullName}</span>
-                    <p className={cls.user__about}>{user.about}</p>
-                </div>
-            </NavLink>
-
-            {user.followed
-                ? <button className={cls.user__btn}
-                          disabled={followingInProgress.some(id => id === user.id)}
-                          onClick={() => unfollow(user.id)}>Unfollow</button>
-                : <button className={cls.user__btn}
-                          disabled={followingInProgress.some(id => id === user.id)}
-                          onClick={() => follow(user.id)}>Follow</button>
-            }
+            <Row justify={"space-between"}>
+                <Avatar shape="square" size={100} src={user.photos.small} icon={<UserOutlined/>}/>
+                <Button type={"primary"} ghost className={cls.user__btn}
+                        disabled={followingInProgress.some(id => id === user.id)}
+                        onClick={onBtnClick}>{btnText}</Button>
+            </Row>
+            <Row>
+                <NavLink to={`/profile/${user.id}`} className={cls.user__link}>
+                    <div className={cls.user__fullName}>{user.fullName}</div>
+                    <div className={cls.user__about}>{user.about}</div>
+                </NavLink>
+            </Row>
         </div>
-    );
+    </>
 };
-
-export default User;

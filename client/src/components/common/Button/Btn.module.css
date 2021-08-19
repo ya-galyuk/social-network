@@ -1,0 +1,9 @@
+.btn__edit {
+    font-size: 16px;
+    color: var(--primary);
+    margin-left: 8px
+}
+
+.btn__edit:hover {
+    opacity: .8;
+}

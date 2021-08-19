@@ -1,21 +1,39 @@
 import React, {FC} from 'react';
-import cls from "./Posts.module.css";
-import {InjectedFormProps, reduxForm} from "redux-form";
-import {createField, Textarea} from "../../common/FormsControls/FormControls";
-import {TPostFormData} from "./Posts";
+import {Form, Input, SubmitButton} from "formik-antd";
+import {Formik, FormikHelpers} from "formik";
+import {actions} from "../../../redux/reducer/profile-reducer";
+import {useDispatch} from "react-redux";
 
-const PostForm: FC<InjectedFormProps<TPostFormData>> = (props) => {
-    const {handleSubmit} = props
+interface IValues {
+    text: string;
+}
+
+export const PostForm: FC<PropsType> = (props) => {
+    const dispatch = useDispatch()
+    const onSubmit = (formData: IValues, {setSubmitting, resetForm}: FormikHelpers<IValues>) => {
+        dispatch(actions.addPost(formData.text))
+        setSubmitting(false)
+        resetForm()
+    }
+
     return (
-        <form className={cls.posts__form} onSubmit={handleSubmit}>
-            <div>
-                {createField<TPostFormKeys>("text", "text", Textarea, [], "Post message", {className: cls.posts__textarea})}
-            </div>
-            <button className={cls.posts__btn}>Public</button>
-        </form>
-    );
+        <Formik
+            enableReinitialize
+            initialValues={{text: ''}}
+            onSubmit={onSubmit}
+        >
+            {({isSubmitting}) => (
+                <Form>
+                    <Form.Item name={"text"}>
+                        <Input.TextArea name={"text"} placeholder="Post message ..." autoSize allowClear/>
+                    </Form.Item>
+                    <Form.Item name={"submit"}>
+                        <SubmitButton type={"primary"} disabled={isSubmitting}>Public</SubmitButton>
+                    </Form.Item>
+                </Form>
+            )}
+        </Formik>
+    )
 };
 
-export default reduxForm<TPostFormData>({form: 'post'})(PostForm);
-
-export type TPostFormKeys = Extract<keyof TPostFormData, string>
+type PropsType = {}

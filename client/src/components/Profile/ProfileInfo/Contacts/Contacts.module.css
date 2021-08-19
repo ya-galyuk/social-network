@@ -1,5 +1,6 @@
 .contacts__item {
     display: flex;
+    gap: 16px;
     margin-bottom: 10px;
     line-height: 1.5;
 }
@@ -8,14 +9,6 @@
     margin: 0;
 }
 
-.contacts__item span {
-    margin-right: 10px;
-}
-
-.contacts__item input {
-}
-
-.error {
-    color: red;
-    border: 1px solid red;
+.form__btnCancel{
+    margin-left: 8px;
 }
