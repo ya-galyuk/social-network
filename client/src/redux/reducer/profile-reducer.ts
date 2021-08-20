@@ -1,5 +1,5 @@
 import {v4 as uuidv4} from 'uuid';
-import profileAPI from "../../api/profile-api";
+import {profileAPI} from "../../api/profile-api";
 import {FormAction, stopSubmit} from "redux-form";
 import {
     IProfileContacts,

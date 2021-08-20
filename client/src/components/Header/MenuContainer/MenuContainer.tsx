@@ -24,7 +24,7 @@ export const MenuContainer: FC<PropsType> = (props) => {
             </Menu.Item>
             <Menu.Item key="mail" icon={<MailOutlined/>}>
                 <Badge count={messageCount} offset={[5, 0]}>
-                    <NavLink to="/messages">Messages</NavLink>
+                    <NavLink to="/chat">Messages</NavLink>
                 </Badge>
             </Menu.Item>
             {isAuth ?

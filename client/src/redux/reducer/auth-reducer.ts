@@ -1,4 +1,4 @@
-import authAPI from "../../api/auth-api";
+import {authAPI} from "../../api/auth-api";
 import {FormAction, stopSubmit} from "redux-form";
 import {ResultCodes} from "../../enums";
 import {BaseThunkType, InferActionType} from "../redux-store";

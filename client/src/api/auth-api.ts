@@ -26,10 +26,8 @@ const logout = () => {
         .then(res => res.data)
 }
 
-const exports = {
+export const authAPI = {
     me,
     login,
     logout
 };
-
-export default exports;

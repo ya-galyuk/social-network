@@ -1,4 +1,4 @@
-import usersAPI from "../../api/users-api";
+import {usersAPI} from "../../api/users-api";
 import {updateObjectInArray} from "../../utils/helpers/object-helper";
 import {UserType} from "../../types/redux/UsersTypes";
 import {ResultCodes} from "../../enums";

@@ -22,10 +22,8 @@ const unfollow = (userId: string) => {
         .then(response => response.data)
 }
 
-const exports = {
+export const usersAPI = {
     getUsers,
     follow,
     unfollow
 };
-
-export default exports;

@@ -55,7 +55,7 @@ const updateProfileDetails = (details: ProfileDetails) => {
         .then(response => response.data)
 }
 
-const exports = {
+export const profileAPI = {
     getProfile,
     getUserStatus,
     updateUserStatus,
@@ -65,5 +65,3 @@ const exports = {
     updateProfileContacts,
     updateProfileDetails
 };
-
-export default exports;

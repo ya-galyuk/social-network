@@ -1,13 +1,22 @@
 'use strict';
 
-require('dotenv').config()
-const express = require('express')
-const cors = require('cors')
-const multer = require('multer');
-const store = require('./store.json');
-const path = require("path");
+import {config} from "dotenv";
+config()
+import express from 'express';
+import cors from 'cors';
+import multer from 'multer';
+// @ts-ignore
+import store from './store.json';
+import path from "path";
+import { v4 as uuidv4 } from 'uuid';
 
 const app = express()
+import WebSocket from 'ws';
+import moment from "moment";
+import {random} from "nanoid";
+
+const wsServer = new WebSocket.Server({port: 9000});
+
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json())
@@ -16,7 +25,7 @@ const whitelist = [process.env.CLIENT_URL, "https://ya-galyuk.github.io"]
 
 app.use(cors({
     credentials: true,
-    origin: (origin, callback) => {
+    origin: (origin: string | undefined, callback: any) => {
         if (whitelist.indexOf(origin) !== -1) {
             return callback(null, true)
         }
@@ -27,10 +36,10 @@ app.use(cors({
 app.use('/uploads', express.static('uploads'))
 
 const storageConfig = multer.diskStorage({
-    destination: (req, file, cb) => {
+    destination: (req: any, file: any, cb: any) => {
         cb(null, "uploads");
     },
-    filename: (req, file, cb) => {
+    filename: (eq: any, file: any, cb: any) => {
         const fileName = file.fieldname + '-' + Date.now() + path.extname(file.originalname)
         cb(null, fileName);
     }
@@ -44,7 +53,7 @@ const upload = multer({storage: storageConfig}).single("image");
  * @query {boolean} [followed] - followed users
  */
 // auth only
-app.get('/api/users', (req, res) => {
+app.get('/api/users', (req: any, res: any) => {
     const {page, count} = req.query
 
     const totalCount = store.users.length
@@ -67,7 +76,7 @@ app.get('/api/users', (req, res) => {
     })
 })
 
-app.get('/api/profile/:userId', (req, res) => {
+app.get('/api/profile/:userId', (req: any, res: any) => {
     const {userId} = req.params
 
     for (const profile of store.profiles) {
@@ -86,12 +95,12 @@ app.get('/api/profile/:userId', (req, res) => {
     })
 })
 
-app.get('/api/profile/status/:userId', (req, res) => {
+app.get('/api/profile/status/:userId', (req: any, res: any) => {
     return res.status(200).send({...store.profile.status})
 })
 
 // TODO: Add router for different profile updates (about, details, educations, contacts)
-app.put('/api/profile', (req, res) => {
+app.put('/api/profile', (req: any, res: any) => {
     const {userId} = req.params
     return res.status(200).send({
         data: {...store.profiles[0], contacts: req.body.data},
@@ -105,7 +114,7 @@ app.put('/api/profile', (req, res) => {
     })
 })
 
-app.put('/api/profile/status', (req, res) => {
+app.put('/api/profile/status', (req: any, res: any) => {
     const {status} = req.body
     return res.status(200).send({
         messages: [],
@@ -116,7 +125,7 @@ app.put('/api/profile/status', (req, res) => {
     })
 })
 
-app.put('/api/profile/about', (req, res) => {
+app.put('/api/profile/about', (req: any, res: any) => {
     const {about} = req.body
     return res.status(200).send({
         messages: [],
@@ -125,7 +134,7 @@ app.put('/api/profile/about', (req, res) => {
     })
 })
 
-app.put('/api/profile/contacts', (req, res) => {
+app.put('/api/profile/contacts', (req: any, res: any) => {
     const {contacts} = req.body
     return res.status(200).send({
         messages: [],
@@ -138,7 +147,7 @@ app.put('/api/profile/contacts', (req, res) => {
  * TODO: update route for details profile
  * @body {fullName: string, status: string} details
  */
-app.put('/api/profile/details', (req, res) => {
+app.put('/api/profile/details', (req: any, res: any) => {
     const {details} = req.body
     return res.status(200).send({
         messages: [],
@@ -147,8 +156,8 @@ app.put('/api/profile/details', (req, res) => {
     })
 })
 
-app.put('/api/profile/photo', (req, res, next) => {
-    upload(req, res, function (err) {
+app.put('/api/profile/photo', (req: any, res: any, next: any) => {
+    upload(req, res, function (err: any) {
         if (err instanceof multer.MulterError) {
             console.log("MulterError", err)
             return res.status(500)
@@ -167,11 +176,11 @@ app.put('/api/profile/photo', (req, res, next) => {
     })
 })
 
-app.post('/api/auth/me', (req, res) => {
+app.post('/api/auth/me', (req: any, res: any) => {
     return res.status(200).send({...store.auth.me})
 })
 
-app.post('/api/auth/login', (req, res) => {
+app.post('/api/auth/login', (req: any, res: any) => {
     const {email, password, remember} = req.body
     if (email !== "admin@admin.com") {
         return res.send({...store.auth.login, messages: ["Incorrect email or password"], resultCode: 1})
@@ -179,19 +188,46 @@ app.post('/api/auth/login', (req, res) => {
     return res.status(200).send({...store.auth.login})
 })
 
-app.delete('/api/auth/logout', (req, res) => {
+app.delete('/api/auth/logout', (req: any, res: any) => {
     return res.status(200).send({...store.auth.logout})
 })
 
 // auth only
-app.post('/api/follow/:userId', (req, res) => {
+app.post('/api/follow/:userId', (req: any, res: any) => {
     return res.status(200).send({...store.follow})
 })
 
 // auth only
-app.delete('/api/unfollow/:userId', (req, res) => {
+app.delete('/api/unfollow/:userId', (req: any, res: any) => {
     return res.status(200).send({...store.unfollow})
 })
+
+wsServer.on('connection', (wsClient) => {
+    console.log('Новый пользователь');
+    const messages = [{
+        userId: 'string',
+        photo: null,
+        userName: 'Yaroslav',
+        message: 'string',
+        dataTime: moment().fromNow(),
+    }]
+    wsClient.send(JSON.stringify(messages));
+    wsClient.on('message', (e) => {
+        let message = [{
+            id: uuidv4() + random(100),
+            userId: 'string',
+            photo: null,
+            userName: 'Yaroslav',
+            message: e.toString(),
+            dataTime: moment().fromNow(),
+        }]
+        wsClient.send(JSON.stringify(message));
+    })
+    wsClient.on('close', () => {
+        // отправка уведомления в консоль
+        console.log('Пользователь отключился');
+    })
+});
 
 app.listen(PORT, () => {
     console.log(`App listening at http://localhost:${PORT}`)
