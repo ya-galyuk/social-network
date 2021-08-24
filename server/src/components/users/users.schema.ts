@@ -51,3 +51,20 @@ export default gql`
     }
 `
 
+export interface IUser {
+    _id: string,
+    fullName: string,
+    email: string,
+    about: string,
+    location: IUserLocation,
+    photos: IPhotos,
+    followed: Boolean,
+    createdAt: string,
+    updatedAt: string,
+}
+
+interface IUserLocation {
+}
+
+interface IPhotos {
+}

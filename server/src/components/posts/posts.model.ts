@@ -5,20 +5,20 @@ const postSchema = new Schema({
     author: String,
     avatar: {type: String, required: false},
     content: String,
-    createdAt: String,
     likes: [{
-        username: String,
-        createdAt: String
+        user: String,
+        createdAt: {type: Date, default: new Date().toISOString()},
+        updatedAt: {type: Date, default: new Date().toISOString()},
     }],
     comments: [{
         body: String,
-        username: String,
-        createdAt: String
+        user: String,
+        createdAt: {type: Date, default: new Date().toISOString()},
+        updatedAt: {type: Date, default: new Date().toISOString()},
     }],
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: 'users'
-    }
+    user: {type: Schema.Types.ObjectId, ref: 'users'},
+    createdAt: {type: Date, default: new Date().toISOString()},
+    updatedAt: {type: Date, default: new Date().toISOString()},
 })
 
-export const PostsModel =model('Post', postSchema)
+export const PostsModel = model('Post', postSchema)
