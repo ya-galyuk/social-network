@@ -13,7 +13,6 @@ import { v4 as uuidv4 } from 'uuid';
 const app = express()
 import WebSocket from 'ws';
 import moment from "moment";
-import {random} from "nanoid";
 
 const wsServer = new WebSocket.Server({port: 9000});
 
@@ -36,9 +35,11 @@ app.use(cors({
 app.use('/uploads', express.static('uploads'))
 
 const storageConfig = multer.diskStorage({
+    // @ts-ignore
     destination: (req: any, file: any, cb: any) => {
         cb(null, "uploads");
     },
+    // @ts-ignore
     filename: (eq: any, file: any, cb: any) => {
         const fileName = file.fieldname + '-' + Date.now() + path.extname(file.originalname)
         cb(null, fileName);
@@ -94,13 +95,14 @@ app.get('/api/profile/:userId', (req: any, res: any) => {
         resultCode: 0,
     })
 })
-
+// @ts-ignore
 app.get('/api/profile/status/:userId', (req: any, res: any) => {
     return res.status(200).send({...store.profile.status})
 })
 
 // TODO: Add router for different profile updates (about, details, educations, contacts)
 app.put('/api/profile', (req: any, res: any) => {
+    // @ts-ignore
     const {userId} = req.params
     return res.status(200).send({
         data: {...store.profiles[0], contacts: req.body.data},
@@ -126,6 +128,7 @@ app.put('/api/profile/status', (req: any, res: any) => {
 })
 
 app.put('/api/profile/about', (req: any, res: any) => {
+    // @ts-ignore
     const {about} = req.body
     return res.status(200).send({
         messages: [],
@@ -135,6 +138,7 @@ app.put('/api/profile/about', (req: any, res: any) => {
 })
 
 app.put('/api/profile/contacts', (req: any, res: any) => {
+    // @ts-ignore
     const {contacts} = req.body
     return res.status(200).send({
         messages: [],
@@ -148,6 +152,7 @@ app.put('/api/profile/contacts', (req: any, res: any) => {
  * @body {fullName: string, status: string} details
  */
 app.put('/api/profile/details', (req: any, res: any) => {
+    // @ts-ignore
     const {details} = req.body
     return res.status(200).send({
         messages: [],
@@ -155,7 +160,7 @@ app.put('/api/profile/details', (req: any, res: any) => {
         data: {}
     })
 })
-
+// @ts-ignore
 app.put('/api/profile/photo', (req: any, res: any, next: any) => {
     upload(req, res, function (err: any) {
         if (err instanceof multer.MulterError) {
@@ -175,29 +180,32 @@ app.put('/api/profile/photo', (req: any, res: any, next: any) => {
         })
     })
 })
-
+// @ts-ignore
 app.post('/api/auth/me', (req: any, res: any) => {
     return res.status(200).send({...store.auth.me})
 })
 
 app.post('/api/auth/login', (req: any, res: any) => {
+    // @ts-ignore
     const {email, password, remember} = req.body
     if (email !== "admin@admin.com") {
         return res.send({...store.auth.login, messages: ["Incorrect email or password"], resultCode: 1})
     }
     return res.status(200).send({...store.auth.login})
 })
-
+// @ts-ignore
 app.delete('/api/auth/logout', (req: any, res: any) => {
     return res.status(200).send({...store.auth.logout})
 })
 
 // auth only
+// @ts-ignore
 app.post('/api/follow/:userId', (req: any, res: any) => {
     return res.status(200).send({...store.follow})
 })
 
 // auth only
+// @ts-ignore
 app.delete('/api/unfollow/:userId', (req: any, res: any) => {
     return res.status(200).send({...store.unfollow})
 })
@@ -214,7 +222,7 @@ wsServer.on('connection', (wsClient) => {
     wsClient.send(JSON.stringify(messages));
     wsClient.on('message', (e) => {
         let message = [{
-            id: uuidv4() + random(100),
+            id: uuidv4(),
             userId: 'string',
             photo: null,
             userName: 'Yaroslav',

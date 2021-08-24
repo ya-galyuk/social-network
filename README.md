@@ -1,20 +1,22 @@
 # Social network
 
-A social networking monorepo designed for learning and practising new practices and technologies
+The project is for learning React.js and aims to improve skills and learn new technologies. Initially, the focus is on
+learning and designing the business layer, not on the UI. Technologies used: React, Redux, Formik, Node.js, Express,
+Apollo, GraphQL.
 
 ## ⚙️ Technologies
 
 ### Client
 
-- react.js
-- redux.js
-- redux-form
-- axios
+- react
+- redux
+- formik
 
 ### Server
 
-- node.js
-- express.js
+- node
+- express
+- apollo-server-express
 
 ## 🚀 Installation
 
@@ -39,28 +41,14 @@ npm install
 2. Insert into the file:
 
 ```dotenv
-PORT=5000
-CLIENT_URL=http://localhost:3000
+PORT=port #ex: 5000
+CLIENT_URL=client_url #ex(localhost): http://localhost:3000
+API_URL=api_url #ex(localhost): http://localhost:5000
+DB_URL=mongodb_url
+JWT_ACCESS_SECRET=access_secret
+JWT_REFRESH_SECRET=refresh_secret
 ```
 
 3. Run `npm run start`
 
 ### 🎉 The sever started on [http://localhost:5000](http://localhost:5000)
-
-## :octocat: GitHub Pages
-
-> Before deploying the app, you must set up GitHub Page for your project.
-
-### Client
-
-1. open `package.json`
-2. add to root `"homepage": "https://<username>.github.io/<project>",`
-3. run `npm run deploy`
-
-### Server
-
-Add to file `.env`:
-
-```dotenv
-GITHUB_PAGES_URL=https://<username>.github.io
-```
