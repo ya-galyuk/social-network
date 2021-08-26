@@ -1,15 +1,22 @@
 import {gql} from "graphql-tag";
+import {makeExecutableSchema} from "@graphql-tools/schema";
 
-export default gql`
-    type Query {
-        _empty: String
-    }
+import {userResolvers} from './components/users/users.resolver'
+import {postResolvers} from './components/posts/posts.resolver'
+import {commentResolvers} from './components/comments/comments.resolver'
 
-    type Mutation {
-        _empty: String
-    }
+import {postTypeDefs} from "./components/posts/posts.schema";
+import {userTypeDefs} from "./components/users/users.schema";
+import {tokenTypeDefs} from "./components/tokens/tokens.schema";
+import {commentTypeDefs} from "./components/comments/comments.schema";
 
-    type Subscription {
-        _empty: String
-    }
+const typeDefs = gql`
+    type Query {_empty: String}
+    type Mutation {_empty: String}
+    type Subscription {_empty: String}
 `
+
+export const schema = makeExecutableSchema({
+    typeDefs: [typeDefs, userTypeDefs, postTypeDefs, tokenTypeDefs, commentTypeDefs],
+    resolvers: [userResolvers, postResolvers, commentResolvers],
+})

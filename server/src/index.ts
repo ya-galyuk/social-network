@@ -1,29 +1,10 @@
 import {ApolloServer} from 'apollo-server-express';
 import {PubSub} from 'graphql-subscriptions';
-import {makeExecutableSchema} from "@graphql-tools/schema";
-
-
 import express from 'express';
 import mongoose from 'mongoose'
-// import cors from 'cors';
+import cors from 'cors';
 import config from './config/index'
-
-
-import userResolvers from './components/users/users.resolver'
-import postResolvers from './components/posts/posts.resolver'
-import commentResolvers from './components/comments/comments.resolver'
-
-import postTypeDefs from "./components/posts/posts.schema";
-import userTypeDefs from "./components/users/users.schema";
-import tokenTypeDefs from "./components/tokens/tokens.schema";
-import commentTypeDefs from "./components/comments/comments.schema";
-import typeDefs from "./schema";
-
-
-const schema = makeExecutableSchema({
-    typeDefs: [typeDefs, userTypeDefs, postTypeDefs, tokenTypeDefs, commentTypeDefs],
-    resolvers: [userResolvers, postResolvers, commentResolvers],
-})
+import {schema} from "./schema";
 
 async function startApolloServer(schema: any) {
     const pubSub = new PubSub()
@@ -34,7 +15,10 @@ async function startApolloServer(schema: any) {
     await server.start();
     const app = express();
 
-    // app.use(cors())
+    app.use(cors({
+        credentials: true,
+        origin: config.allowedOrigins
+    }))
 
     server.applyMiddleware({app})
 

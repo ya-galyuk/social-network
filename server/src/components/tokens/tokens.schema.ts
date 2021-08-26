@@ -1,6 +1,6 @@
 import {gql} from "graphql-tag";
 
-export default gql`
+export const tokenTypeDefs = gql`
     type Token {
         accessToken: String!
         refreshToken: String!,

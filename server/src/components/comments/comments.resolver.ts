@@ -3,7 +3,7 @@ import {ForbiddenError, UserInputError} from "apollo-server-express";
 import {CommentsService} from "./comments.service";
 import {PostsModel} from "../posts/posts.model";
 
-export default {
+export const commentResolvers = {
     Mutation: {
         // @ts-ignore
         createComment: async (_, args, context) => {
@@ -22,7 +22,7 @@ export default {
                 post.comments.unshift({body, user: user.email,})
                 await post.save()
 
-                return post
+                return {...post, id: post._id}
             } catch (err) {
                 throw new Error(err)
             }
@@ -43,7 +43,7 @@ export default {
 
                 post.comment.slice(commentIndex, 1)
                 await post.save()
-                return post
+                return {...post, id: post._id}
             } catch (err) {
                 throw new Error(err)
             }

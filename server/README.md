@@ -2,9 +2,7 @@
 
 ## ⚙️ Technologies
 
-- node.js
-- express.js
-- apollo-server-express
+Node.js, Express.js, apollo-server-express, yup, jwt.
 
 ## 🚀 Installation
 

@@ -1,14 +1,30 @@
 import {gql} from "graphql-tag";
 
-export default gql`
+export const userTypeDefs = gql`
     extend type Query {
-        getUsers: [User!]!
+        getUsers(offset: Int, limit: Int, size: Int): [UsersResult!]!
         getUserOne(userId: ID!): User!
+        me(refreshToken: String!): Me!
     }
 
     extend type Mutation {
         register(registerInput: RegisterInput): AuthRes!
         login(loginInput: LoginInput): AuthRes!
+        logout(refreshToken: String!): String!
+    }
+
+    type UsersResult {
+        items: [User]!, 
+        totalCount: Int
+    }
+
+    type Me {
+        user: MeUser!
+    }
+    
+    type MeUser {
+        id: ID!
+        email: String!,
     }
 
     type AuthRes {
@@ -17,7 +33,7 @@ export default gql`
     }
 
     type User {
-        _id: ID!
+        id: ID!
         fullName: String,
         email: String!,
         about: String,
@@ -48,11 +64,12 @@ export default gql`
     input LoginInput {
         email: String!,
         password: String!,
+        remember: Boolean
     }
 `
 
 export interface IUser {
-    _id: string,
+    id: string,
     fullName: string,
     email: string,
     about: string,

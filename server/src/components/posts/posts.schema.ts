@@ -1,7 +1,7 @@
 import {gql} from 'graphql-tag'
 import {IPostComment} from "../comments/comments.schema";
 
-export default gql`
+export const postTypeDefs = gql`
     extend type Query {
         getPosts: [Post!]
         getPost(postId: ID!): Post!
@@ -18,7 +18,7 @@ export default gql`
     }
 
     type Post {
-        _id: ID!
+        id: ID!
         href: String,
         author: String!,
         avatar: String,
@@ -32,7 +32,7 @@ export default gql`
     }
 
     type PostLike {
-        _id: ID!
+        id: ID!
         user: String!,
         createdAt: String!,
         updatedAt: String!,
@@ -40,7 +40,7 @@ export default gql`
 `
 
 export interface IPost {
-    _id: string,
+    id: string,
     href: string | null,
     author: string,
     avatar: string | null,

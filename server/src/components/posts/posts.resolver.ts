@@ -3,7 +3,7 @@ import {checkAuth} from "../../middleware/auth-middleware";
 import {ForbiddenError, UserInputError} from "apollo-server-express";
 import {IPost, IPostLike} from "./posts.schema";
 
-export default {
+export const postResolvers = {
     Post: {
         likeCount: async (parent: IPost) => parent.likes.length,
         commentCount: async (parent: IPost) => parent.comments.length,
@@ -22,7 +22,7 @@ export default {
             try {
                 const {postId} = args
                 const post = await PostsModel.findById(postId)
-                return post ? post : new Error('Post not found')
+                return post ? {...post, id: post._id} : new Error('Post not found')
             } catch (err) {
                 throw new Error(err)
             }
@@ -37,11 +37,11 @@ export default {
             const post = await PostsModel.create({
                 author: user.email,
                 content: body,
-                user: user._id,
+                user: user.id,
             })
 
             context.pubsub.publish('NEW_POST', {newPost: post})
-            return post
+            return {...post, id: post._id}
         },
         // @ts-ignore
         deletePost: async (_, args, context) => {
@@ -50,7 +50,7 @@ export default {
                 const user = checkAuth(context)
                 const post = await PostsModel.findById(postId)
 
-                if (user._id === post.user) {
+                if (user.id === post.user) {
                     await post.delete()
                     return 'Post deleted successful'
                 }
@@ -75,7 +75,7 @@ export default {
                 post.likes.push({user: user.email})
             }
             await post.save()
-            return post
+            return {...post, id: post._id}
         }
     },
     Subscription: {

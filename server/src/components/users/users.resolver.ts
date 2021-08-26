@@ -1,16 +1,53 @@
 import {UserModel} from "./users.model";
 import bcrypt from 'bcrypt'
 // import uuid from 'uuid'
-import {UserInputError, AuthenticationError} from 'apollo-server-express'
+import {AuthenticationError, UserInputError} from 'apollo-server-express'
 import {TokensService} from "../tokens/tokens.service";
 import {UsersService} from "./users.service";
+import {IUser} from "./users.schema";
 
-export default {
+interface IUsersSearch {
+    items: IUser[],
+    totalCount: number
+}
+
+export const userResolvers = {
+    UsersResult: {
+        totalCount: async (parent: IUsersSearch) => parent.items.length,
+    },
     Query: {
-        getUsers: async () => {
+        // @ts-ignore
+        me: async (_, args, context, info) => {
+            const {refreshToken} = args
+
+            if (!refreshToken) {
+                throw new AuthenticationError('User are not authorized')
+            }
+            const userData = TokensService.validateRefreshToken(refreshToken)
+
+            const tokenFromDB = await TokensService.findToken(refreshToken)
+            if (!userData || !tokenFromDB) {
+                throw new AuthenticationError('User are not authorized')
+            }
+
+            // @ts-ignore
+            const user = await UserModel.findById(userData._id)
+            const userDto = UsersService.userDto(user);
+
+            return {user: {...userDto, id: userDto._id}}
+        },
+        // @ts-ignore
+        getUsers: async (_, args, context, info) => {
             try {
+                const {offset, limit} = args
                 const users = await UserModel.find()
-                return users
+                    .skip(offset ? ((offset - 1) * limit) : 0)
+                    .limit(limit)
+
+                return users.map((user: any) => {
+                    user.id = user._id
+                    return user
+                })
             } catch (e) {
                 throw new Error(e)
             }
@@ -20,7 +57,6 @@ export default {
         // @ts-ignore
         login: async (_, args, context, info) => {
             const {loginInput} = args
-            const {res} = context
             const {email, password} = loginInput
 
             const {errors, valid} = await UsersService.validateLoginInput(loginInput)
@@ -46,8 +82,7 @@ export default {
             const tokens = TokensService.generateToken({...userDto})
             await TokensService.saveToken(userDto._id, tokens.refreshToken)
 
-            res.cookie('refreshToken', tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
-            return {tokens: tokens, user: userDto}
+            return {tokens: tokens, user: {...userDto, id: userDto._id}}
         },
         // @ts-ignore
         register: async (_, args, context, info) => {
@@ -76,7 +111,14 @@ export default {
             const userDto = UsersService.userDto(user);
             const tokens = TokensService.generateToken({...userDto})
             await TokensService.saveToken(userDto._id, tokens.refreshToken)
-            return {tokens: tokens, user: userDto}
-        }
+
+            return {tokens: tokens, user: {...userDto, id: userDto._id}}
+        },
+        // @ts-ignore
+        logout: async (_, args, context, info) => {
+            const {refreshToken} = args
+            await TokensService.removeToken(refreshToken)
+            return "Successful logout."
+        },
     }
 }
