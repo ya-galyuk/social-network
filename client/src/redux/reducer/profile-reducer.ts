@@ -102,7 +102,7 @@ export const updatePhoto = (file: File): ThunkType => async (dispatch) => {
 }
 
 export const saveProfileAbout = (about: string | null): ThunkType => async (dispatch, getState) => {
-    const userId = getState().auth.userId
+    const userId = getState().auth.user?.id
     if (!userId) {
         throw new Error("userId can't be null")
     }
@@ -120,7 +120,7 @@ export const saveProfileAbout = (about: string | null): ThunkType => async (disp
 }
 
 export const saveProfileContacts = (contacts: IProfileContacts): ThunkType => async (dispatch, getState) => {
-    const userId = getState().auth.userId
+    const userId = getState().auth.user?.id
     if (!userId) {
         throw new Error("userId can't be null")
     }
@@ -137,7 +137,7 @@ export const saveProfileContacts = (contacts: IProfileContacts): ThunkType => as
 }
 
 export const updateProfileDetails = (details: ProfileDetails): ThunkType => async (dispatch, getState) => {
-    let userId = getState().auth.userId
+    let userId = getState().auth.user?.id
     if (!userId) {
         throw new Error("userId can't be null")
     }

@@ -6,17 +6,9 @@ Apollo, GraphQL.
 
 ## ⚙️ Technologies
 
-### Client
+**Client:** React.js, Redux.js, @apollo/client, formik, yup.
 
-- react
-- redux
-- formik
-
-### Server
-
-- node
-- express
-- apollo-server-express
+**Server:** Node.js, Express.js, apollo-server-express, yup, jwt.
 
 ## 🚀 Installation
 

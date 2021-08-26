@@ -1,0 +1,10 @@
+.auth__form{
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.auth__header{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
