@@ -4,12 +4,18 @@ import {Provider} from "react-redux";
 import store from "./redux/redux-store";
 import {App} from "./App";
 
+import {ApolloProvider} from "@apollo/client";
+import {client} from "./api/config";
+
+
 const AppContainer = () => {
     return (
         <BrowserRouter>
-            <Provider store={store}>
-                <App/>
-            </Provider>
+            <ApolloProvider client={client}>
+                <Provider store={store}>
+                    <App/>
+                </Provider>
+            </ApolloProvider>
         </BrowserRouter>
     );
 };

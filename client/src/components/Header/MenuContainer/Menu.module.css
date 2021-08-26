@@ -1,10 +1,21 @@
-.menu{
+.menu {
     border-bottom-color: var(--light) !important;
 }
+
+.menu__item {
+    font-size: 15px;
+}
+
 .menu li:not(:last-child) {
     opacity: initial !important;
     height: initial !important;
     overflow-y: initial !important;
     pointer-events: auto !important;
     position: relative !important;
+}
+
+@media screen and (max-width: 768px) {
+    .menu__link_mob {
+        display: none;
+    }
 }

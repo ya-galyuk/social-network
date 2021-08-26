@@ -1,0 +1,39 @@
+.auth__form{
+    max-width: 420px;
+    margin: 0 auto;
+}
+
+.auth__header{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.auth__title{
+    font-size: 28px;
+    margin-bottom: 2rem;
+}
+
+.auth__helper,
+.auth__forgot{
+    font-size: 13px;
+}
+
+.auth__item input {
+    height: 32px;
+    font-size: 15px;
+}
+.auth__item button {
+    height: 42px;
+    font-size: 15px;
+}
+
+.auth__icon_prefix{
+    margin-right: 4px;
+}
+
+/*@media screen and (max-width: 768px) {*/
+/*    .auth__form{*/
+/*        margin: 0 auto;*/
+/*    }*/
+/*}*/

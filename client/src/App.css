@@ -44,12 +44,6 @@ body,
 }
 
 .wrapper {
-    display: grid;
-    grid-template-areas:
-        "header header"
-        "menu content";
-    grid-template-rows: 1fr 11fr;
-    grid-template-columns: 2fr 10fr;
     height: 100%;
     max-width: 1200px;
     margin: 0 auto;
@@ -62,8 +56,14 @@ body,
 }
 
 .content {
-    padding: 20px 50px;
+    padding: 20px;
     background: var(--light);
+}
+
+header,
+main,
+footer {
+    /*background: dimgray !important;*/
 }
 
 .profile__upload .ant-upload.ant-upload-select-picture-card {

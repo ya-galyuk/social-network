@@ -1,20 +1,21 @@
-import {authAPI} from "../../api/auth-api";
-import {FormAction, stopSubmit} from "redux-form";
-import {ResultCodes} from "../../enums";
 import {BaseThunkType, InferActionType} from "../redux-store";
+import jwt_decode from "jwt-decode";
 
-let initialState = {
-    userId: null as (string | null),
-    email: null as (string | null),
-    login: null as (string | null),
+interface IUserData {
+    id: string,
+    email: string,
+}
+
+const initialState = {
+    user: null as IUserData | null,
     isAuth: false,
     isLoading: false
-}
+};
 
 const authReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
-        case "AUTH/SET_USER_DATA" : {
-            return {...state, ...action.payload,};
+        case "auth/SET_USER_DATA" : {
+            return {...state, ...action.payload,}
         }
         default: {
             return state;
@@ -23,38 +24,45 @@ const authReducer = (state = initialState, action: ActionsTypes): InitialStateTy
 }
 
 export const actions = {
-    setAuthUserData: (userId: string | null, email: string | null, login: string | null, isAuth: boolean) => ({
-        type: 'AUTH/SET_USER_DATA',
-        payload: {userId, email, login, isAuth}
-    } as const)
+    setAuthUserData: (userData: { id: string, email: string } | null, isAuth: boolean) => ({
+        type: 'auth/SET_USER_DATA',
+        payload: {user: userData, isAuth}
+    } as const),
 }
 
 export const getAuthUserData = (): ThunkType => async (dispatch) => {
-    const res = await authAPI.me()
-    if (res.resultCode === ResultCodes.Success) {
-        let {userId, email, login} = res.data
-        dispatch(actions.setAuthUserData(userId, email, login, true))
+    const accessToken = localStorage.getItem('accessToken')
+    if (!accessToken) return
+
+    const decodedToken: any = jwt_decode(accessToken)
+
+    if (decodedToken?.exp * 1000 < Date.now()) {
+        dispatch(actions.setAuthUserData(null, false))
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('refreshToken')
+    } else {
+        dispatch(actions.setAuthUserData(decodedToken, true))
     }
 }
 
-export const login = (email: string, password: string, rememberMe: boolean): ThunkType => async (dispatch) => {
-    const res = await authAPI.login(email, password, rememberMe)
-    if (res.resultCode === ResultCodes.Success) {
-        return dispatch(getAuthUserData())
-    }
-    let message = res.messages.length ? res.messages[0] : "Common error"
-    dispatch(stopSubmit("login", {_error: message}))
+export const login = (inputValue: IUserData): ThunkType => async (dispatch) => {
+    dispatch(actions.setAuthUserData(inputValue, true))
+}
+
+export const register = (inputValue: IUserData): ThunkType => async (dispatch) => {
+    dispatch(actions.setAuthUserData(inputValue, true))
 }
 
 export const logout = (): ThunkType => async (dispatch) => {
-    const res = await authAPI.logout()
-    if (res.resultCode === ResultCodes.Success) {
-        dispatch(actions.setAuthUserData(null, null, null, false))
-    }
+    dispatch(actions.setAuthUserData(null, false))
+}
+
+export const checkAuth = (): ThunkType => async (dispatch) => {
+    await dispatch(getAuthUserData())
 }
 
 export default authReducer
 
 export type InitialStateType = typeof initialState
 type ActionsTypes = InferActionType<typeof actions>
-type ThunkType = BaseThunkType<ActionsTypes | FormAction>
+type ThunkType = BaseThunkType<ActionsTypes>

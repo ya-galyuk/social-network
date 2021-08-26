@@ -1,4 +1,5 @@
-header{
+.header__container{
+    padding: 0 20px !important;
     background: var(--light) !important;
 }
 .header {
@@ -28,27 +29,4 @@ header{
 
 .header__username {
     font-weight: 600;
-}
-
-.header__link {
-    font-size: 16px;
-    font-weight: bold;
-    color: var(--blue);
-    margin-top: 20px;
-    padding: 8px 16px;
-    border: 1px solid var(--blue);
-    background: var(--light);
-    border-radius: 5px;
-    cursor: pointer;
-    text-decoration: none;
-}
-
-.header__link:hover {
-    background: var(--orange);
-    border: var(--orange);
-    color: var(--light);
-}
-
-.header__link:disabled {
-    background: var(--gray_light);
 }

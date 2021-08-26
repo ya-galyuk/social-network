@@ -2,10 +2,7 @@
 
 ## ⚙️ Technologies
 
-- react.js
-- redux.js
-- redux-form
-- axios
+React.js, Redux.js, @apollo/client, formik, yup.
 
 ## 🚀 Installation
 
