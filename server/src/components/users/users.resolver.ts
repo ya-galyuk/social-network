@@ -4,16 +4,24 @@ import bcrypt from 'bcrypt'
 import {AuthenticationError, UserInputError} from 'apollo-server-express'
 import {TokensService} from "../tokens/tokens.service";
 import {UsersService} from "./users.service";
-import {IUser} from "./users.schema";
+import {IUser, IUserFollower} from "./users.schema";
+import {checkAuth} from "../../middleware/auth-middleware";
 
-interface IUsersSearch {
-    items: IUser[],
-    totalCount: number
+interface IFindFilter {
+    $text?: { $search: string },
+    followed?: boolean
 }
 
 export const userResolvers = {
-    UsersResult: {
-        totalCount: async (parent: IUsersSearch) => parent.items.length,
+    User: {
+        // @ts-ignore
+        followed: async (parent: IUser, _, context) => {
+            const authUser = checkAuth(context)
+            const user = await UserModel.findById(authUser.id)
+            const follower = user.followers.find((follower: IUserFollower) => follower.user.toString() === parent.id)
+            return !!follower
+        },
+        followerCount: async (parent: IUser) => parent.followers.length,
     },
     Query: {
         // @ts-ignore
@@ -30,24 +38,42 @@ export const userResolvers = {
                 throw new AuthenticationError('User are not authorized')
             }
 
-            // @ts-ignore
-            const user = await UserModel.findById(userData._id)
-            const userDto = UsersService.userDto(user);
-
-            return {user: {...userDto, id: userDto._id}}
+            const user = await UserModel.findById(userData.id)
+            return user
         },
         // @ts-ignore
         getUsers: async (_, args, context, info) => {
             try {
-                const {offset, limit} = args
-                const users = await UserModel.find()
+                let {offset, limit, filter: {query, followed}} = args
+                let findFilter: IFindFilter | null = null
+                let totalCount: number
+
+                if (query) findFilter = {$text: {$search: query}}
+                if (typeof followed === "boolean") findFilter = {...findFilter, followed: followed}
+
+                if (findFilter) {
+                    totalCount = await UserModel.find(findFilter).count()
+                } else {
+                    findFilter = {}
+                    totalCount = await UserModel.countDocuments();
+                }
+
+                let users = await UserModel
+                    .find(findFilter)
                     .skip(offset ? ((offset - 1) * limit) : 0)
                     .limit(limit)
 
-                return users.map((user: any) => {
-                    user.id = user._id
-                    return user
-                })
+                return {items: users, totalCount}
+            } catch (e) {
+                throw new Error(e)
+            }
+        },
+        // @ts-ignore
+        getUser: async (_, args, context, info) => {
+            try {
+                let {userId} = args
+                let user = await UserModel.findById(userId)
+                return user
             } catch (e) {
                 throw new Error(e)
             }
@@ -80,9 +106,9 @@ export const userResolvers = {
 
             const userDto = UsersService.userDto(user);
             const tokens = TokensService.generateToken({...userDto})
-            await TokensService.saveToken(userDto._id, tokens.refreshToken)
+            await TokensService.saveToken(userDto.id, tokens.refreshToken)
 
-            return {tokens: tokens, user: {...userDto, id: userDto._id}}
+            return {tokens: tokens, user: userDto}
         },
         // @ts-ignore
         register: async (_, args, context, info) => {
@@ -110,9 +136,9 @@ export const userResolvers = {
 
             const userDto = UsersService.userDto(user);
             const tokens = TokensService.generateToken({...userDto})
-            await TokensService.saveToken(userDto._id, tokens.refreshToken)
+            await TokensService.saveToken(userDto.id, tokens.refreshToken)
 
-            return {tokens: tokens, user: {...userDto, id: userDto._id}}
+            return {tokens: tokens, user: userDto}
         },
         // @ts-ignore
         logout: async (_, args, context, info) => {
@@ -120,5 +146,24 @@ export const userResolvers = {
             await TokensService.removeToken(refreshToken)
             return "Successful logout."
         },
+        // @ts-ignore
+        follow: async (_, args, context, info) => {
+            const {userId} = args
+            const authUser = checkAuth(context)
+
+            const user = await UserModel.findById(authUser.id)
+            if (!user) throw new UserInputError('User not found')
+
+            const follower = user.followers.find((follower: IUserFollower) => follower.user.toString()  === userId)
+
+            if (follower) {
+                user.followers = user.followers.filter((follower: IUserFollower) => follower.user.toString() !== userId)
+            } else {
+                user.followers.push({user: userId})
+            }
+
+            await user.save()
+            return user
+        }
     }
 }

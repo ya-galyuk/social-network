@@ -22,7 +22,7 @@ export const commentResolvers = {
                 post.comments.unshift({body, user: user.email,})
                 await post.save()
 
-                return {...post, id: post._id}
+                return post
             } catch (err) {
                 throw new Error(err)
             }
@@ -36,14 +36,14 @@ export const commentResolvers = {
 
                 if (!post) throw new UserInputError('Post not found')
 
-                const commentIndex = post.comments.findIndex((comment: any) => comment._id = commentId)
+                const commentIndex = post.comments.findIndex((comment: any) => comment.id = commentId)
                 if (post.comments[commentIndex].user !== user.email) {
                     throw new ForbiddenError('Action not allowed')
                 }
 
                 post.comment.slice(commentIndex, 1)
                 await post.save()
-                return {...post, id: post._id}
+                return post
             } catch (err) {
                 throw new Error(err)
             }

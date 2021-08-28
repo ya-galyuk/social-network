@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import config from '../../config/index'
 import {TokensModel} from "./tokens.model";
+import {IUser} from "../users/users.schema";
 
 const generateToken = (payload: string | Buffer | object) => {
     const accessToken = jwt.sign(payload, config.jwt.accessSecret, {expiresIn: '30m'})
@@ -23,7 +24,7 @@ const validateAccessToken = (accessToken: string) => {
 const validateRefreshToken = (refreshToken: string) => {
     try {
         const userData = jwt.verify(refreshToken, config.jwt.refreshSecret)
-        return userData
+        return <IUser>userData
     } catch (e) {
         return null;
     }

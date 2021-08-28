@@ -14,11 +14,18 @@ const userSchema = new Schema({
         small: {type: String, required: false,},
         large: {type: String, required: false,},
     },
-    followed: {type: Boolean, default: false},
+    followers: [{
+        user: {type: Schema.Types.ObjectId, ref: 'users'},
+        createdAt: {type: Date, default: new Date().toISOString()},
+        updatedAt: {type: Date, default: new Date().toISOString()},
+    }],
+    followerCount: {type: Number},
     isActivated: {type: Boolean, default: false},
     activationLink: {type: String},
     createdAt: {type: Date, default: new Date().toISOString()},
     updatedAt: {type: Date, default: new Date().toISOString()},
 })
+
+userSchema.index({fullName: 'text', email: 'text'});
 
 export const UserModel = model('User', userSchema)

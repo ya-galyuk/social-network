@@ -22,7 +22,7 @@ export const postResolvers = {
             try {
                 const {postId} = args
                 const post = await PostsModel.findById(postId)
-                return post ? {...post, id: post._id} : new Error('Post not found')
+                return post ? post : new Error('Post not found')
             } catch (err) {
                 throw new Error(err)
             }
@@ -41,7 +41,7 @@ export const postResolvers = {
             })
 
             context.pubsub.publish('NEW_POST', {newPost: post})
-            return {...post, id: post._id}
+            return post
         },
         // @ts-ignore
         deletePost: async (_, args, context) => {
@@ -75,7 +75,7 @@ export const postResolvers = {
                 post.likes.push({user: user.email})
             }
             await post.save()
-            return {...post, id: post._id}
+            return post
         }
     },
     Subscription: {

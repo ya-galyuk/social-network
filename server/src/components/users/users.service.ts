@@ -3,7 +3,7 @@ import {validateMiddleware} from "../../middleware/validate-middleware";
 
 const userDto = (user: any) => {
     return {
-        _id: user._id,
+        id: user._id,
         email: user.email,
         isActivated: user.isActivated,
         createdAt: user.createdAt,

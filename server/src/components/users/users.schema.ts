@@ -2,8 +2,8 @@ import {gql} from "graphql-tag";
 
 export const userTypeDefs = gql`
     extend type Query {
-        getUsers(offset: Int, limit: Int, size: Int): [UsersResult!]!
-        getUserOne(userId: ID!): User!
+        getUsers(offset: Int, limit: Int, filter: Filter): UsersResult!
+        getUser(userId: ID!): User!
         me(refreshToken: String!): Me!
     }
 
@@ -11,10 +11,11 @@ export const userTypeDefs = gql`
         register(registerInput: RegisterInput): AuthRes!
         login(loginInput: LoginInput): AuthRes!
         logout(refreshToken: String!): String!
+        follow(userId: ID!): User!
     }
 
     type UsersResult {
-        items: [User]!, 
+        items: [User!]
         totalCount: Int
     }
 
@@ -41,6 +42,8 @@ export const userTypeDefs = gql`
         location: UserLocation,
         photos: Photos,
         followed: Boolean,
+        followers: [UserFollower]!,
+        followerCount: Int,
         createdAt: String!,
         updatedAt: String!,
     }
@@ -54,6 +57,13 @@ export const userTypeDefs = gql`
         small: String,
         large: String,
     }
+    
+    type UserFollower {
+        id: ID!
+        user: String!,
+        createdAt: String!,
+        updatedAt: String!,
+    }
 
     input RegisterInput {
         email: String!,
@@ -66,6 +76,11 @@ export const userTypeDefs = gql`
         password: String!,
         remember: Boolean
     }
+
+    input Filter {
+        query: String
+        followed: Boolean
+    }
 `
 
 export interface IUser {
@@ -76,6 +91,8 @@ export interface IUser {
     location: IUserLocation,
     photos: IPhotos,
     followed: Boolean,
+    followers: IUserFollower[],
+    followerCount: number,
     createdAt: string,
     updatedAt: string,
 }
@@ -84,4 +101,11 @@ interface IUserLocation {
 }
 
 interface IPhotos {
+}
+
+export interface IUserFollower {
+    id: string,
+    user: string,
+    createdAt: string,
+    updatedAt: string,
 }
