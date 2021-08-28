@@ -6,24 +6,24 @@ import {Avatar, Button, Row} from "antd";
 import {UserOutlined} from '@ant-design/icons';
 
 type PropsType = {
-    user: UserType,
-    followingInProgress: Array<string>
+    user: UserType
+    isFollowing: boolean
+    followingUser: string | null
     follow: (userId: string) => void
-    unfollow: (userId: string) => void
 }
 
 export const User: FC<PropsType> = (props) => {
-    const {user, followingInProgress, follow, unfollow} = props
+    const {user, isFollowing, followingUser, follow} = props
     const btnText = user.followed ? "Unfollow" : "Follow"
 
-    const onBtnClick = () => user.followed ? unfollow(user.id) : follow(user.id)
+    const onBtnClick = () => follow(user.id)
 
     return <>
         <div className={cls.user__item}>
             <Row justify={"space-between"}>
                 <Avatar shape="square" size={100} src={user.photos.small} icon={<UserOutlined/>}/>
                 <Button type={"primary"} ghost className={cls.user__btn}
-                        disabled={followingInProgress.some(id => id === user.id)}
+                        disabled={isFollowing && followingUser === user.id}
                         onClick={onBtnClick}>{btnText}</Button>
             </Row>
             <Row>

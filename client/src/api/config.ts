@@ -7,14 +7,13 @@ export const instance = axios.create({
     baseURL: 'http://localhost:5000/api/'
 })
 
-
 const httpLink = createHttpLink({
     uri: 'http://localhost:5000/graphql',
     credentials: 'same-origin',
 });
 
 const authLink = setContext((_, { headers }) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessToken');
     return {
         headers: {
             ...headers,

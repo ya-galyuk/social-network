@@ -3,7 +3,6 @@ import cls from './Menu.module.css';
 import {NavLink} from "react-router-dom";
 import {Avatar, Badge, Divider, Menu} from "antd";
 import {LoginOutlined, LogoutOutlined, MailOutlined, TeamOutlined, UserOutlined} from "@ant-design/icons";
-import classNames from "classnames";
 
 const {SubMenu} = Menu
 

@@ -1,19 +1,20 @@
 import React, {FC} from 'react';
 import {Formik, FormikHelpers} from 'formik';
 import {Form, Input, Select, SubmitButton} from 'formik-antd'
-import {TFilter} from "../../../redux/reducer/users-reducer";
-import {useSelector} from "react-redux";
-import {getFilter} from "../../../redux/selectors/users-selectors";
 import {SearchOutlined} from '@ant-design/icons';
+import {IFilter} from "../UsersPage";
 
 const {Option} = Select;
 
+interface IValues {
+    query: string;
+    followed: string;
+}
+
 const SearchForm: FC<PropsType> = React.memo((props) => {
-    const {onFilterChanged} = props
+    const {filter, onFilterChanged} = props
 
-    const filter = useSelector(getFilter)
-
-    const onSubmit = (values: TFilter, {setSubmitting}: FormikHelpers<TFilter>) => {
+    const onSubmit = (values: IValues, {setSubmitting}: FormikHelpers<IValues>) => {
         onFilterChanged(values)
         setSubmitting(false)
     }
@@ -21,7 +22,10 @@ const SearchForm: FC<PropsType> = React.memo((props) => {
     return (
         <Formik
             enableReinitialize
-            initialValues={{query: filter.query, followed: filter.followed}}
+            initialValues={{
+                query: filter.query,
+                followed: filter.followed !== null ? filter.followed.toString() : "null"
+            }}
             onSubmit={onSubmit}
         >
             {({isSubmitting}) => (
@@ -49,5 +53,6 @@ const SearchForm: FC<PropsType> = React.memo((props) => {
 export default SearchForm;
 
 type PropsType = {
-    onFilterChanged: (filter: TFilter) => void
+    filter: IFilter
+    onFilterChanged: (filter: IFilter) => void
 }
