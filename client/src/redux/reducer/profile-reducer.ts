@@ -23,15 +23,6 @@ let initialState = {
             datetime: moment().fromNow(),
             action: {like: 128, comment: 0,}
         },
-        {
-            id: '2',
-            href: 'https://ant.design',
-            author: 'Han Solo 2',
-            avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-            content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-            datetime: moment().fromNow(),
-            action: {like: 2, comment: 0,}
-        },
     ] as Array<PostsType>,
     profile: null as (ProfileType | null)
 }

@@ -1,22 +1,30 @@
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 import cls from "./Avatar.module.css";
 import {CameraOutlined, UserOutlined} from "@ant-design/icons";
 import {Avatar, message, Upload} from "antd";
 import ImgCrop from 'antd-img-crop';
 import {RcFile} from "antd/es/upload";
-import {UploadChangeParam, UploadFile} from "antd/lib/upload/interface";
+import {UploadFile} from "antd/lib/upload/interface";
 import classNames from "classnames";
-import {useDispatch, useSelector} from "react-redux";
-import {updatePhoto} from "../../../../redux/reducer/profile-reducer";
-import {getPhotos} from "../../../../redux/selectors/profile-selectors";
+import {useSelector} from "react-redux";
+import {gql, useMutation} from "@apollo/client";
+import {getAuthorizedUserId} from "../../../../redux/selectors/auth-selectors";
+import {useMessageError, useMessageLoading} from "../../../../hooks/message-hook";
+import {GET_USER} from "../../ProfileContainer";
 
 
 export const AvatarContainer: FC<PropsType> = (props) => {
     const {editMode} = props
 
-    const photos = useSelector(getPhotos)
+    const userId = useSelector(getAuthorizedUserId)
+    const [photos, setPhotos] = useState<IUserPhoto | null>(null)
 
-    const dispatch = useDispatch()
+    const [photoUpload, {loading, error}] = useMutation(PHOTO_UPLOAD_MUTATION, {
+        refetchQueries: [GET_USER, 'GetUser'],
+    });
+
+    useMessageError(error)
+    useMessageLoading(loading)
 
     const onPreview = async (file: UploadFile) => {
         let src: any = file.url;
@@ -47,15 +55,10 @@ export const AvatarContainer: FC<PropsType> = (props) => {
         return isJpgOrPng && isLt2M;
     };
 
-    const onChange = async (info: UploadChangeParam) => {
-        if (info.file.status === 'done' && info.file.originFileObj) {
-            await dispatch(updatePhoto(info.file.originFileObj))
-            message.success(`${info.file.name} file uploaded successfully`);
-        }
-        if (info.file.status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
-        }
-    };
+    const onChange = (info: any) => {
+        const {target: {validity, files: [file]}} = info
+        validity.valid && photoUpload({variables: {file}});
+    }
 
     return (
         <div style={{position: "relative"}}>
@@ -81,4 +84,20 @@ export const AvatarContainer: FC<PropsType> = (props) => {
 
 type PropsType = {
     editMode: boolean
+}
+
+const PHOTO_UPLOAD_MUTATION = gql`
+    mutation PhotoUpload($file: Upload!) {
+        photoUpload(file: $file) {
+            filename
+            mimetype
+            encoding
+            url
+        }
+    }
+`;
+
+interface IUserPhoto {
+    small: string | null;
+    large: string | null;
 }

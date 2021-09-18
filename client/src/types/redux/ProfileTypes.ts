@@ -54,9 +54,9 @@ export type ProfileType = {
     userId: string,
     fullName: string,
     status: string | null,
-    photos: ProfilePhotosType,
+    photos: ProfilePhotosType | null,
     about: string | null
     contacts: IProfileContacts,
-    educations: Array<ProfileEducationsType>,
-    job: ProfileJobType
+    educations: Array<ProfileEducationsType> | null,
+    job: ProfileJobType | null
 }

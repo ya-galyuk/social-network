@@ -26,7 +26,7 @@ export const AboutContainer: FC<PropsType> = React.memo((props) => {
         setEditMode(false)
     }
 
-    if (!about) return null
+    // if (!about) return null
 
     return (
         <div className={clsProfile.about}>

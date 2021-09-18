@@ -30,7 +30,9 @@ const UsersPage: FC<PropsType> = (props) => {
         }
     });
 
-    const [follow, {loading: followLoading}] = useMutation(FOLLOW_USER_MUTATION)
+    const [follow, {loading: followLoading}] = useMutation(FOLLOW_USER_MUTATION,{
+        refetchQueries: [GET_ALL_USERS_QUERY, 'GetAllUsers']
+    })
 
     useEffect(() => {
         const parsed: IQuery = queryString.parse(history.location.search, {parseBooleans: true});
@@ -86,7 +88,6 @@ const UsersPage: FC<PropsType> = (props) => {
     const onFollow = async (userId: string) => {
         setFollowingUser(userId)
         await follow({variables: {userId}})
-        await refetch()
     }
 
     return <>

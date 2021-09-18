@@ -15,7 +15,7 @@ export const Educations: FC<PropsType> = (props) => {
 
     const [editMode, setEditMode] = useState(false)
 
-    if (!educations) return null
+    // if (!educations) return null
 
     const educationElements = educations?.map((education, index) =>
         <Timeline.Item key={uuidv4()} className={cls.educations__item}

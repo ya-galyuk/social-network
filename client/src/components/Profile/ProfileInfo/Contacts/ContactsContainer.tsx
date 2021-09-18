@@ -9,11 +9,18 @@ import Title from "../../common/Title";
 export const ContactsContainer: FC<PropsType> = (props) => {
     const {isOwner} = props
 
-    const contacts = useSelector(getContacts)
+    let contacts = useSelector(getContacts)
 
     const [editMode, setEditMode] = useState(false)
 
-    if (!contacts) return null
+    if (!contacts) contacts = {
+        Email: '',
+        GitHub: '',
+        LinkedIn: '',
+        Telegram: '',
+        WebSite: '',
+        YouTube: ''
+    }
 
     return (
         <div className={cls.contacts}>

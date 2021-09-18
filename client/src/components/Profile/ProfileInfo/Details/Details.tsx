@@ -20,10 +20,6 @@ export const Details: FC<PropsType> = (props) => {
 
     return (
         <div className={cls.details}>
-            <Divider orientation="right" className={cls.details__hr}>
-                {!editMode
-                && <Button type={"text"} onClick={onClickEdit} className={cls.details__btn}>edit</Button>}
-            </Divider>
             <Row>
                 <Col span={6}>
                     <AvatarContainer editMode={editMode}/>
