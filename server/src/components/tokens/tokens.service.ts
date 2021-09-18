@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import config from '../../config/index'
+import {config} from '../../config'
 import {TokensModel} from "./tokens.model";
 import {IUser} from "../users/users.schema";
 

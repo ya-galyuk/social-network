@@ -3,7 +3,7 @@ dotenv.config();
 
 import uuid from 'uuid'
 
-export default {
+export const config  ={
     apiUrl: process.env.API_URL || 'http://localhost:5000',
     db: process.env.DB_URL || '',
     port: process.env.PORT || 5000,

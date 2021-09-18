@@ -3,8 +3,9 @@ import {PubSub} from 'graphql-subscriptions';
 import express from 'express';
 import mongoose from 'mongoose'
 import cors from 'cors';
-import config from './config/index'
+import {config} from './config'
 import {schema} from "./schema";
+import {graphqlUploadExpress} from "graphql-upload";
 
 async function startApolloServer(schema: any) {
     const pubSub = new PubSub()
@@ -14,6 +15,8 @@ async function startApolloServer(schema: any) {
     });
     await server.start();
     const app = express();
+
+    app.use(graphqlUploadExpress());
 
     app.use(cors({
         credentials: true,

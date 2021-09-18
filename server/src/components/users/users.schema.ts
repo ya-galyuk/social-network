@@ -1,6 +1,8 @@
 import {gql} from "graphql-tag";
 
 export const userTypeDefs = gql`
+    scalar Upload
+    
     extend type Query {
         getUsers(offset: Int, limit: Int, filter: Filter): UsersResult!
         getUser(userId: ID!): User!
@@ -12,6 +14,7 @@ export const userTypeDefs = gql`
         login(loginInput: LoginInput): AuthRes!
         logout(refreshToken: String!): String!
         follow(userId: ID!): User!
+        photoUpload(file: Upload!): File!
     }
 
     type UsersResult {
@@ -22,7 +25,7 @@ export const userTypeDefs = gql`
     type Me {
         user: MeUser!
     }
-    
+
     type MeUser {
         id: ID!
         email: String!,
@@ -34,18 +37,21 @@ export const userTypeDefs = gql`
     }
 
     type User {
-        id: ID!
+        id: ID
         fullName: String,
-        email: String!,
+        email: String,
         about: String,
         status: String,
         location: UserLocation,
         photos: Photos,
+        contacts: UserContacts,
         followed: Boolean,
-        followers: [UserFollower]!,
+        followers: [UserFollower],
+        educations: [UserEducations],
+        job: UserJob,
         followerCount: Int,
-        createdAt: String!,
-        updatedAt: String!,
+        createdAt: String,
+        updatedAt: String,
     }
 
     type UserLocation {
@@ -57,12 +63,48 @@ export const userTypeDefs = gql`
         small: String,
         large: String,
     }
-    
+
+    type UserContacts {
+        Email: String,
+        Telegram: String,
+        GitHub: String,
+        YouTube: String,
+        LinkedIn: String,
+        WebSite: String,
+    }
+
+    type UserEducations {
+        country: String,
+        city: String,
+        university: UserSchool,
+        fieldOfStudy: String,
+        degree: String,
+        startYear: String,
+        endYear: String
+    }
+
+    type UserSchool {
+        logo: String,
+        name: String
+    }
+
+    type UserJob {
+        lookingForAJob: Boolean,
+        description: String
+    }
+
     type UserFollower {
         id: ID!
         user: String!,
         createdAt: String!,
         updatedAt: String!,
+    }
+
+    type File {
+        filename: String!
+        mimetype: String!
+        encoding: String!
+        url: String!
     }
 
     input RegisterInput {

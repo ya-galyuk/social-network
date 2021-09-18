@@ -1,11 +1,14 @@
 import {UserModel} from "./users.model";
 import bcrypt from 'bcrypt'
-// import uuid from 'uuid'
+import uuid from 'uuid'
 import {AuthenticationError, UserInputError} from 'apollo-server-express'
 import {TokensService} from "../tokens/tokens.service";
 import {UsersService} from "./users.service";
 import {IUser, IUserFollower} from "./users.schema";
 import {checkAuth} from "../../middleware/auth-middleware";
+import {GraphQLUpload} from "graphql-upload";
+import * as fs from "fs";
+import {config} from "../../config";
 
 interface IFindFilter {
     $text?: { $search: string },
@@ -13,6 +16,7 @@ interface IFindFilter {
 }
 
 export const userResolvers = {
+    Upload: GraphQLUpload,
     User: {
         // @ts-ignore
         followed: async (parent: IUser, _, context) => {
@@ -154,7 +158,7 @@ export const userResolvers = {
             const user = await UserModel.findById(authUser.id)
             if (!user) throw new UserInputError('User not found')
 
-            const follower = user.followers.find((follower: IUserFollower) => follower.user.toString()  === userId)
+            const follower = user.followers.find((follower: IUserFollower) => follower.user.toString() === userId)
 
             if (follower) {
                 user.followers = user.followers.filter((follower: IUserFollower) => follower.user.toString() !== userId)
@@ -164,6 +168,22 @@ export const userResolvers = {
 
             await user.save()
             return user
-        }
+        },
+        // @ts-ignore
+        photoUpload: async (_, args, context, info) => {
+            const {file} = args
+            const {createReadStream, mimetype, encoding, filename} = await file;
+            let path = `${__dirname}uploads/${uuid.v4()}${filename}`;
+            let stream = createReadStream();
+
+            const out = stream.pipe(fs.createWriteStream(path))
+            out.on("finish", () => {
+                return {mimetype, filename, encoding, url: `${config.apiUrl}/${path}`}
+            })
+            out.on("error", (err: any) => {
+                console.log("Error Event Emitted", err)
+                return null
+            })
+        },
     }
 }
